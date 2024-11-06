@@ -17,7 +17,7 @@
             <li>
               <h2>쇼핑 목록</h2>
               <div class="todoinput">
-                <input type="text" autofocus onkeyup="enterTitle(event)" />
+                <input type="text" autofocus onkeyup="handleKey(event)" />
                 <button type="button" onclick="handleAdd()">추가</button>
               </div>
               <ul class="todolist">
@@ -60,77 +60,91 @@
         { no: 3, title: "라면", done: true },
       ];
 
-      // ul 요소 획득
-      const todoListElem = document.querySelector(".todolist");
+      // 출력하기 위해 ul 노드 획득
+      const ulNode = document.querySelector(".todolist");
 
-      // 하드코딩 되어 있던 기존 목록 삭제
-      while (todoListElem.firstChild) {
-        todoListElem.firstChild.remove();
+      // html로 하드코딩 되어 있는 목록 삭제
+      while (ulNode.firstChild) {
+        ulNode.firstChild.remove();
       }
 
-      // itemList 배열의 각 todo 아이템을 화면에 추가
+      // 기존 itemList에 있는 초기 데이터를 출력
       itemList.forEach((item) => {
-        const todoItem = getTodoItemElem(item);
-        todoListElem.appendChild(todoItem);
+        const liNode = getTodoItemElem(item);
+        ulNode.appendChild(liNode);
       });
 
-      // 한건의 Todo 객체를 받아서 DOM 객체로 만들어 반환
+      // 각각의 아이템을 DOM 노드로 반환함
       function getTodoItemElem(item) {
-        const noSpanElem = document.createElement("span");
-        const noSpanTxt = document.createTextNode(`${item.no}`);
-        noSpanElem.appendChild(noSpanTxt);
+        // noSpan 생성
+        const noSpanNode = document.createElement("span");
+        const noSpanText = document.createTextNode(`${item.no}`);
+        noSpanNode.appendChild(noSpanText);
 
-        const titleSpanElem = document.createElement("span");
-        const titleSpanTxt = document.createTextNode(`${item.title}`);
-        titleSpanElem.appendChild(titleSpanTxt);
+        // titleSpan 생성
+        const titleSpanNode = document.createElement("span");
+        const titleSpanTxt = document.createTextNode(item.title);
+        // done 속성 값에 따라 다르게 출력
+        if (item.done) {
+          const sNode = document.createElement("s");
+          sNode.appendChild(titleSpanTxt);
+          titleSpanNode.appendChild(sNode);
+        } else {
+          titleSpanNode.appendChild(titleSpanTxt);
+        }
 
-        const deleteButtonElem = document.createElement("button");
-        deleteButtonElem.setAttribute("type", "button");
-        const deleteButtonTxt = document.createTextNode("삭제");
-        deleteButtonElem.appendChild(deleteButtonTxt);
+        // button 생성
+        //   <button type="button">삭제</button>
+        const deleteBtnNode = document.createElement("button");
+        const deleteBtnTxt = document.createTextNode("삭제");
+        deleteBtnNode.appendChild(deleteBtnTxt);
 
-        const liElem = document.createElement("li");
-        liElem.appendChild(noSpanElem);
-        liElem.appendChild(titleSpanElem);
-        liElem.appendChild(deleteButtonElem);
+        const liNode = document.createElement("li");
+        liNode.appendChild(noSpanNode);
+        liNode.appendChild(titleSpanNode);
+        liNode.appendChild(deleteBtnNode);
 
-        return liElem;
+        return liNode;
       }
 
-      // 추가 버튼 이벤트 핸들러 유지 보수성과 재사용성을 높이기 위해 이벤트 핸들러를 따로 설정
-      // (1) 엔터와 추가 버튼 클릭시 addItem 함수 호출
-      // (2) 입력값 획득과 유효성 검사를 담당. addItem은 아이템 생성과 출력을 담당.
+      // 개발생산성과 유지보수성을 위해 입력값 획득 함수와 객체 생성 및 화면 출력 함수를 나눠서 작성
+      // (1) 입력값 획득 & 유효성 검사
       const handleAdd = () => {
-        // input 노드 획득
-        const inputElem = document.querySelector(".todoinput input");
-        if (inputElem.value.trim() !== "") {
-          addItem(inputElem.value);
-          inputElem.value = "";
-          inputElem.focus();
+        const inputNode = document.querySelector(".todoinput input");
+        // 입력값이 유효하다면(있다면)
+        if (inputNode.value.trim() !== "") {
+          // addItem 함수에 입력값을 전달하여 호출
+          addItem(inputNode.value);
+          inputNode.value = ""; // 입력칸 초기화
+          inputNode.focus(); // 재포커스
         }
       };
 
-      // input 엔터 이벤트 핸들러
-      const enterTitle = (event) => {
-        if (event.key === "Enter") handleAdd();
+      // (1-1) 값 입력 후 엔터 클릭 시
+      const handleKey = (event) => {
+        if (event.key === "Enter") {
+          handleAdd();
+        }
       };
 
-      // 할일 추가
+      // 할일 추가 (객체 생성 + 화면 출력)
       function addItem(title) {
         // 객체 생성
         const item = {
-          no: itemList[itemList.length - 1].no + 1,
+          // itemList에 item이 없다면 1부터 번호 재시작
+          no: itemList.length > 0 ? itemList[itemList.length - 1].no + 1 : 1,
           title,
-          done: false,
+          done: false, // 초기값 : 아직 완료하지 않음
         };
 
-        // 상태변화에 따른 두 가지 할 일
-        // (1) 데이터 업데이트
+        // (1) 데이터 갱신
         itemList.push(item);
+        console.log(itemList);
 
-        // (2) 화면 업데이트
-        const liElem = getTodoItemElem(item);
-        todoListElem.appendChild(liElem);
+        // (2) 화면 갱신
+        // getTodoItemElem 함수에 새롭게 생긴 item을 전달하여 호출
+        const liNode = getTodoItemElem(item);
+        ulNode.appendChild(liNode);
       }
 
       // 완료/미완료 처리
