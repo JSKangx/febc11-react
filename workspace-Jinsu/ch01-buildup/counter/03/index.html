@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="module">
+      /*
+        module 속성은 defer 속성을 지정한 것처럼 지연 실행됨(비동기 방식).
+        HTML 파싱을 멈추지 않고, HTML 파싱이 끝난 이후에 실행.
+        연결된 script가 전부 module이라면 위에서부터 먼저 실행
+      */
+
+      import Kang from "./kang.js";
+
+      // UI 구성 스크립트
+      // (1) <h1>Counter - JS로 UI 구성</h1>
+      const h1Node = Kang.createElement(
+        "h1",
+        null,
+        "Counter - createElement() 라이브러리 사용"
+      );
+
+      // (2) <p>파일 경로: <span id="filepath"></span></p>
+      const filePNode = Kang.createElement(
+        "p",
+        null,
+        "파일 경로: ",
+        Kang.createElement("span", { id: "filepath" })
+      );
+
+      // (3) <header>
+      const Header = Kang.createElement("header", null, h1Node, filePNode);
+
+      // (4) <button type="button" onclick="handleDown()">-</button>
+      const downBtnNode = Kang.createElement(
+        "button",
+        { type: "button", onclick: "handleDown()" },
+        "-"
+      );
+
+      // (5) <button type="button" onclick="handleReset(event)">0</button>
+      const resetBtnNode = Kang.createElement(
+        "button",
+        { type: "button", onclick: "handleReset(event)" },
+        "0"
+      );
+
+      // (6) <button type="button" onclick="handleUp()">+</button>
+      const upBtnNode = Kang.createElement(
+        "button",
+        { type: "button", onclick: "handleUp(event)" },
+        "+"
+      );
+
+      // (7) <span>0</span>
+      const countSpanNode = Kang.createElement("span", null, 0);
+
+      // (8) <div id="counter">
+      const Counter = Kang.createElement(
+        "div",
+        { id: "counter" },
+        downBtnNode,
+        resetBtnNode,
+        upBtnNode,
+        countSpanNode
+      );
+
+      // (9) <div id="app">
+      const App = Kang.createElement("div", { id: "app" }, Header, Counter);
+
+      document.getElementById("root").appendChild(App);
+    </script>
+
+    <script type="module">
+      document.querySelector("#filepath").textContent = `ch${
+        document.URL.split("/ch")[1]
+      }index.html`;
+    </script>
+
+    <script type="text/javascript">
+      let count = 0;
+
+      const handleDown = () => {
+        // (1) 데이터 갱신
+        count--;
+
+        // (2) 화면 갱신
+        const counterSpanNode = document.querySelector("#counter > span");
+        counterSpanNode.textContent = count;
+      };
+      const handleUp = () => {
+        // (1) 데이터 갱신
+        count++;
+
+        // (2) 화면 갱신
+        const counterSpanNode = document.querySelector("#counter > span");
+        counterSpanNode.textContent = count;
+      };
+      const handleReset = (event) => {
+        // (1) 데이터 갱신
+        count = 0;
+
+        // (2) 화면 갱신
+        const counterSpanNode = document.querySelector("#counter > span");
+        counterSpanNode.textContent = count;
+      };
+    </script>
+  </body>
+</html>
