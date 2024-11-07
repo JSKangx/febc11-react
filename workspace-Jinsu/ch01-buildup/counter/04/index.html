@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="module">
+      /*
+        module 속성은 defer 속성을 지정한 것처럼 지연 실행됨(비동기 방식).
+        HTML 파싱을 멈추지 않고, HTML 파싱이 끝난 이후에 실행.
+        연결된 script가 전부 module이라면 위에서부터 먼저 실행
+      */
+
+      import Kang from "./kang.js";
+
+      // 애플리케이션의 시작점. UI를 리턴받고 화면에 뿌린다.
+      // prettier-ignore
+      function App() {
+        return (
+          Kang.createElement("div", { id: "app" },
+            Kang.createElement("header", null,
+              Kang.createElement("h1",null, "Counter - createElement() 라이브러리 사용"),
+              Kang.createElement("p",null, "파일 경로: ", 
+                Kang.createElement("span", { id: "filepath" }, `ch${document.URL.split("/ch")[1]}index.html`))),
+            Kang.createElement("div", { id: "counter" },
+              Kang.createElement("button", { type: "button", onclick: "handleDown()" }, "-"),
+              Kang.createElement("button", { type: "button", onclick: "handleReset(event)" },"0"),
+              Kang.createElement("button", { type: "button", onclick: "handleUp(event)" }, "+"),
+              Kang.createElement("span", null, 0)))
+        );
+      }
+
+      // UI 구성 스크립트
+
+      // document.getElementById("root").appendChild(App);
+      Kang.createRoot(document.getElementById("root")).render(App);
+    </script>
+
+    <script type="text/javascript">
+      let count = 0;
+
+      const handleDown = () => {
+        // (1) 데이터 갱신
+        count--;
+
+        // (2) 화면 갱신
+        const counterSpanNode = document.querySelector("#counter > span");
+        counterSpanNode.textContent = count;
+      };
+      const handleUp = () => {
+        // (1) 데이터 갱신
+        count++;
+
+        // (2) 화면 갱신
+        const counterSpanNode = document.querySelector("#counter > span");
+        counterSpanNode.textContent = count;
+      };
+      const handleReset = (event) => {
+        // (1) 데이터 갱신
+        count = 0;
+
+        // (2) 화면 갱신
+        const counterSpanNode = document.querySelector("#counter > span");
+        counterSpanNode.textContent = count;
+      };
+    </script>
+  </body>
+</html>
