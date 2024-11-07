@@ -202,6 +202,18 @@
         // 해당 liNode 지우기
         selectedLiNode.remove();
       }
+
+      // 화면 갱신 함수를 따로 만들어서 매 함수마다 호출해줄 수도 있다
+      function render() {
+        while (ulNode.firstChild) {
+          ulNode.firstChild.remove();
+        }
+
+        itemList.forEach((item) => {
+          const liNode = getTodoItemElem(item);
+          ulNode.appendChild(liNode);
+        });
+      }
     </script>
   </body>
 </html>
