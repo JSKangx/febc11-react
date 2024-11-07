@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Counter</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/javascript">
+      window.onload = function () {
+        document.querySelector("#filepath").textContent = `ch${
+          document.URL.split("/ch")[1]
+        }index.html`;
+      };
+    </script>
+
+    <script type="text/javascript">
+      // UI 구성 스크립트
+      // (1) <h1>Counter - JS로 UI 구성</h1>
+      const h1Node = document.createElement("h1");
+      const h1Txt = document.createTextNode("Counter - JS로 UI구성");
+      h1Node.appendChild(h1Txt);
+
+      // (2) <p>파일 경로: <span id="filepath"></span></p>
+      const filepathSpanNode = document.createElement("span");
+      filepathSpanNode.setAttribute("id", "filepath");
+      const filePNode = document.createElement("p");
+      const filePTxt = document.createTextNode("파일 경로: ");
+      filePNode.appendChild(filePTxt);
+      filePNode.appendChild(filepathSpanNode);
+
+      // (3) <header>
+      const Header = document.createElement("header");
+      Header.appendChild(h1Node);
+      Header.appendChild(filePNode);
+
+      // (4) <button type="button" onclick="handleDown()">-</button>
+      const downBtnNode = document.createElement("button");
+      const downBtnTxt = document.createTextNode("-");
+      downBtnNode.setAttribute("type", "buttton");
+      downBtnNode.setAttribute("onclick", "handleDown()");
+      downBtnNode.appendChild(downBtnTxt);
+
+      // (5) <button type="button" onclick="handleReset(event)">0</button>
+      const resetBtnNode = document.createElement("button");
+      const resetBtnTxt = document.createTextNode("0");
+      resetBtnNode.setAttribute("type", "buttton");
+      resetBtnNode.setAttribute("onclick", "handleReset(event)");
+      resetBtnNode.appendChild(resetBtnTxt);
+
+      // (6) <button type="button" onclick="handleUp()">+</button>
+      const upBtnNode = document.createElement("button");
+      const upBtnTxt = document.createTextNode("+");
+      upBtnNode.setAttribute("type", "buttton");
+      upBtnNode.setAttribute("onclick", "handleUp()");
+      upBtnNode.appendChild(upBtnTxt);
+
+      // (7) <span>0</span>
+      const countSpanNode = document.createElement("span");
+      const countTxt = document.createTextNode(0);
+      countSpanNode.appendChild(countTxt);
+
+      // (8) <div id="counter">
+      const Counter = document.createElement("div");
+      Counter.setAttribute("id", "counter");
+      Counter.appendChild(downBtnNode);
+      Counter.appendChild(resetBtnNode);
+      Counter.appendChild(upBtnNode);
+      Counter.appendChild(countSpanNode);
+
+      // (9) <div id="app">
+      const App = document.createElement("div");
+      App.setAttribute("id", "app");
+      App.appendChild(Header);
+      App.appendChild(Counter);
+
+      document.getElementById("root").appendChild(App);
+    </script>
+
+    <script type="text/javascript">
+      let count = 0;
+
+      const handleDown = () => {
+        // (1) 데이터 갱신
+        count--;
+
+        // (2) 화면 갱신
+        const counterSpanNode = document.querySelector("#counter > span");
+        counterSpanNode.textContent = count;
+      };
+      const handleUp = () => {
+        // (1) 데이터 갱신
+        count++;
+
+        // (2) 화면 갱신
+        const counterSpanNode = document.querySelector("#counter > span");
+        counterSpanNode.textContent = count;
+      };
+      const handleReset = (event) => {
+        // (1) 데이터 갱신
+        count = 0;
+
+        // (2) 화면 갱신
+        const counterSpanNode = document.querySelector("#counter > span");
+        counterSpanNode.textContent = count;
+      };
+    </script>
+  </body>
+</html>
