@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo List App</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="module">
+      import kang from "../kang.js";
+
+      /*
+          ┌───────── App ──────────┐
+          │           │            │
+        Header       Todo        Footer
+                      │
+                  ┌───┴───┐
+            TodoInput   TodoList
+                           │
+                        TodoItem
+      */
+
+      // 헤더 구성
+      // prettier-ignore
+      function Header() {
+        return (
+          kang.createElement('header', null,
+            kang.createElement('h1', null, 'Todo List - 상태 변경시 리렌더링 :)'),
+            kang.createElement('p', null, '파일 경로: ',
+              kang.createElement('span', { id: 'filepath' }, `ch${document.URL.split('/ch')[1]}index.html`)))
+        )
+      }
+
+      // 입력창 구성
+      // prettier-ignore
+      function TodoInput({ handleAdd, handleAddKeyup }) {
+        return (
+          kang.createElement('div', { class: 'todoinput' },
+            kang.createElement('input', { type: 'text', autofocus: '', onkeyup: event => handleAddKeyup(event)}),
+            kang.createElement('button', { type: 'button', onclick: handleAdd}, '추가'))
+        )
+      }
+
+      // 할 일 아이템 하나
+      // prettier-ignore
+      // 구조분해 할당을 통해 TodoList에서 넘어오는 { item }을 인수로 넣어줌.
+      function TodoItem({ item, toggleDone, deleteItem }) {
+        return (
+          kang.createElement('li', { 'data-no': item.no },
+            kang.createElement('span', null, item.no),
+            kang.createElement('span', { onclick: () => toggleDone(item.no) },
+              item.done? kang.createElement('s', null, item.title) : item.title),
+            kang.createElement('button', { onclick: () => deleteItem(item.no) }, '삭제'))
+        );
+      }
+
+      // 할 일 목록 구성
+      function TodoList(props) {
+        const list = props.itemList.map((item) =>
+          TodoItem({
+            item,
+            toggleDone: props.toggleDone,
+            deleteItem: props.deleteItem,
+          })
+        );
+        return kang.createElement("ul", { class: "todolist" }, list);
+      }
+
+      // 할 일 구성
+      // prettier-ignore
+      function Todo(props) {
+        return (
+          kang.createElement('div', { id: 'main' },
+            kang.createElement('div', { id: 'container' },
+              kang.createElement('ul', null,
+                kang.createElement('li', null,
+                  kang.createElement('h2', null, '쇼핑 목록'),
+                  TodoInput({ 
+                    handleAdd: props.handleAdd, 
+                    handleAddKeyup: props.handleAddKeyup 
+                  }),
+                  TodoList({ 
+                    itemList: props.itemList, 
+                    toggleDone: props.toggleDone, 
+                    deleteItem: props.deleteItem
+                  })))))
+        )
+      }
+
+      // 푸터 구성
+      // prettier-ignore
+      function Footer() {
+        return (
+          kang.createElement('footer', null,
+            kang.createElement('p', null, '멋쟁이 사자처럼 FrontEnd BootCamp'))
+        )
+      }
+
+      function App() {
+        // 샘플 목록
+        // let itemList = [
+        //   { no: 1, title: "두부", done: true },
+        //   { no: 2, title: "계란", done: false },
+        //   { no: 3, title: "라면", done: true },
+        // ];
+
+        const [itemList, setItemList] = kang.useState([
+          { no: 1, title: "두부", done: true },
+          { no: 2, title: "계란", done: false },
+          { no: 3, title: "라면", done: true },
+        ]);
+
+        // "추가" 클릭 이벤트 핸들러
+        const handleAdd = () => {
+          const inputElem = document.querySelector(".todoinput > input");
+          if (inputElem.value.trim() !== "") {
+            addItem(inputElem.value);
+            inputElem.value = "";
+            inputElem.focus();
+          }
+        };
+
+        // 엔터 이벤트 핸들러
+        const handleAddKeyup = (event) => {
+          if (event.key === "Enter") handleAdd();
+        };
+
+        // 할일 추가
+        function addItem(title) {
+          const item = {
+            no: itemList[itemList.length - 1].no + 1,
+            title,
+            done: false,
+          };
+
+          // TODO: 데이터 갱신 (set 함수로 값 변경 가능)
+          /* 
+            배열은 주소를 참조하기 때문에 단순히 itemList에 추가하면 안 된다.
+            그러면 업데이트가 되면 두 개가 서로 같은 주소를 참조하고 있어서 항상 같다고 되어서 상태 변경이 안 된다.
+          */
+          const newItemList = [...itemList, item];
+          setItemList(newItemList);
+          // 축약형 setItemList([...itemList, item]);
+        }
+
+        // 완료/미완료 처리
+        function toggleDone(no) {
+          // TODO: 데이터 갱신
+          const newItemList = [...itemList];
+          let selectedItem = newItemList.find((item) => item.no === no);
+          selectedItem.done = !selectedItem.done;
+
+          setItemList(newItemList);
+        }
+
+        // 할일 삭제
+        function deleteItem(no) {
+          // TODO: 데이터 갱신
+          // filter 메서드는 새 배열을 반환하기 때문에 old 배열 !== new 배열이기에 렌더링 조건에 만족. 스프레드 연산자로 깊은 복사 불필요.
+          // 만약 splice로 배열을 조정하려면 원본배열을 변경(주소는 그대로)하기에 스프레드 연산자로 깊은 복사하여 새로운 배열 만들어주는 과정 필요.
+          const newItemList = itemList.filter((item) => item.no !== no);
+          setItemList(newItemList);
+        }
+
+        return kang.createElement(
+          "div",
+          { id: "todo" },
+          Header,
+          Todo({ handleAdd, handleAddKeyup, itemList, toggleDone, deleteItem }),
+          Footer
+        );
+      }
+
+      kang.createRoot(document.getElementById("root")).render(App);
+    </script>
+  </body>
+</html>
