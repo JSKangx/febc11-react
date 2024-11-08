@@ -28,30 +28,22 @@
       }
 
       function Counter() {
-        let count = 0;
+        // let count = 0;
+        const [count, setCount] = Kang.useState(10);
 
         const handleDown = () => {
-          // (1) 데이터 갱신
-          count--;
-          // (2) 화면 갱신
-          const counterSpanNode = document.querySelector("#counter > span");
-          counterSpanNode.textContent = count;
+          // (1) 데이터 갱신 + useState를 통한 화면 렌더링
+          setCount(count - 1); // count는 직접 못 바꾸고 setCount 함수로만 바꿀 수 있음.
         };
 
         const handleUp = () => {
           // (1) 데이터 갱신
-          count++;
-          // (2) 화면 갱신
-          const counterSpanNode = document.querySelector("#counter > span");
-          counterSpanNode.textContent = count;
+          setCount(count + 1);
         };
 
         const handleReset = (event) => {
           // (1) 데이터 갱신
-          count = 0;
-          // (2) 화면 갱신
-          const counterSpanNode = document.querySelector("#counter > span");
-          counterSpanNode.textContent = count;
+          setCount(0);
         };
 
         // prettier-ignore
