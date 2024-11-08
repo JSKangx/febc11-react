@@ -76,17 +76,20 @@ const kang = (() => {
       const oldValue = _stateValue; // oldValue === 10;
       _stateValue = newValue; // _stateValue === 11;
 
-      // 디버깅 위한 로그 찍기
-      console.log("상태가 변경되었나?", oldValue, newValue);
-
-      // Object.is : 두 인수가 같은지 비교하는 함수. 같지 않을 경우에(상태 변경된 경우) 리렌더링한다.
+      /* 
+        Object.is : 두 인수가 같은지 비교하는 함수. 같지 않을 경우에(상태 변경된 경우) 리렌더링한다.
+          - 두 값이 객체 : 같은 메모리 주소를 가지고 있으면 true
+          - 두 값이 모두 undefined이거나 null이면 true
+          - 두 값이 모두 true이거나 false 이면 true
+          - 두 값이 모두 string일 경우 글자 수, 순서, 모든 글자가 같으면 true
+          - 두 값이 모두 number라면 같은 값을 가지고 있거나 둘 다 NaN이라면 true
+      */
       /*
         1. 원시값 : 값만 바뀌면 상태가 바뀌었다고 인지
         2. 객체 : 값이 바뀌어도 주소가 안 바뀌면 상태가 바뀌었다고 인지 X.
           - 스프레드 연산자로 깊은 복사한 후 새로운 배열을 만들어 그것과 새로운 것을 비교해야 한다.
       */
       if (!Object.is(oldValue, newValue)) {
-        console.log("리렌더링");
         _root.render();
       }
     }
