@@ -1,4 +1,4 @@
-import Kang from './kang.js';
+import Kang from '../kang.js';
 
 function Counter() {
   // let count = 0;

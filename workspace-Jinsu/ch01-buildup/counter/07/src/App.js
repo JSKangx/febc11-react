@@ -1,4 +1,4 @@
-import Kang from './kang.js';
+import Kang from '../kang.js';
 import Header from './Header.js';
 import Counter from './Counter.js';
 
