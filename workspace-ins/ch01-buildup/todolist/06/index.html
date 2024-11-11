@@ -19,35 +19,14 @@
 
     // 한건의 Todo 객체를 받아서 DOM 객체로 만들어 반환
     function getTodoItemElem(item){
-      const liElem = document.createElement('li');
-      const noElem = document.createElement('span');
-      const titleElem = document.createElement('span');
-      const deleteElem = document.createElement('button');
-      
-      const noTxt = document.createTextNode(item.no);
-      const titleTxt = document.createTextNode(item.title);
-      const deleteTxt = document.createTextNode('삭제');
-
-      noElem.appendChild(noTxt);
-      if(item.done){ // 완료
-        const sElem = document.createElement('s');
-        sElem.appendChild(titleTxt);
-        titleElem.appendChild(sElem);
-      }else{ // 미완료
-        titleElem.appendChild(titleTxt);
-      }
-      deleteElem.setAttribute('type', 'button');
-      deleteElem.appendChild(deleteTxt);
-      liElem.appendChild(noElem);
-      liElem.appendChild(titleElem);
-      liElem.appendChild(deleteElem);
-      liElem.setAttribute('data-no', item.no);
-      titleElem.setAttribute('onclick', `toggleDone(${ item.no })`);
-      deleteElem.setAttribute('onclick', `deleteItem(${ item.no })`);
-
-      return liElem;
+      return (
+        yong.createElement('li', { 'data-no': item.no }, 
+          yong.createElement('span', null, item.no),
+          yong.createElement('span', { onclick: () => toggleDone(item.no) }, 
+            item.done? yong.createElement('s', null, item.title) : item.title), 
+          yong.createElement('button', { onclick: () => deleteItem(item.no) }, '삭제'))
+      );
     }
-
 
     function App(){
 
