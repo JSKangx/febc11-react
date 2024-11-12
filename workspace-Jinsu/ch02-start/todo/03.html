@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Todo List</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="text/babel">
+      /*
+        이 상태로는 재사용이 안 된다.
+        1. 모듈(독립적인 파일)로 만들어야 한다.
+        2. 범용성 : Title 안에 글자를 하드코딩해서는 여러 곳에서 쓸 수 없다. 타이틀 값을 각 페이지 별로 다르게 전달 받아서 출력해야 함.
+      */
+
+      const Title = ({ title }) => {
+        return (
+          <div>
+            <h1>Simple Todo List - {title} :()</h1>
+            <hr />
+          </div>
+        );
+      };
+
+      const TodoList = ({ list }) => {
+        const itemList = list.map((item) => (
+          <li key={item._id}>
+            {item.title} - {item.done ? '완료' : '진행중'}
+          </li>
+        ));
+        return <ul className='todolist'>{itemList}</ul>;
+      };
+
+      const App = () => {
+        const title = 'React Props';
+        const list = [
+          { _id: 1, title: '리그오브레전드', done: false },
+          { _id: 2, title: '영화보기 (집에서)', done: false },
+          { _id: 3, title: '던파', done: false },
+        ];
+
+        return (
+          <div id='app'>
+            <div>
+              <Title title={title} />
+              <TodoList list={list} />
+            </div>
+          </div>
+        );
+      };
+
+      ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+  </body>
+</html>
