@@ -1,27 +1,36 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>자바스크립트 모듈</title>
-</head>
-<body>
-  <header>
-    <h1>module 예제 :)</h1>
-    <p>파일 경로: <span id="filepath"></span></p>
-  </header>
-  <div id="main">
-    <p>개발자 도구의 콘솔을 확인하세요.</p>
-  </div>
-  <footer>
-    <p>Front-End School 9기</p>
-  </footer>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>자바스크립트 모듈</title>
+  </head>
+  <body>
+    <header>
+      <h1>module 예제 :)</h1>
+      <p>파일 경로: <span id="filepath"></span></p>
+    </header>
+    <div id="main">
+      <p>개발자 도구의 콘솔을 확인하세요.</p>
+    </div>
+    <footer>
+      <p>Front-End School 11기</p>
+    </footer>
 
-  <script type="module">
-    document.querySelector('#filepath').textContent = `ch${document.URL.split('/ch')[1]}index.html`;
+    <script type="module">
+      document.querySelector('#filepath').textContent =
+        `ch${document.URL.split('/ch')[1]}index.html`;
 
-    
-  </script>
+      // 같은 곳에서 오는 함수는 중괄호로 묶어서 import 가능
+      // import { plus, minus, avg } from './export.js';
 
-</body>
+      // default가 붙은 export는 이름을 임의로 이름을 붙여서가져와야 한다.
+      // 그 파일에서 export default로 된 함수를 불러온다.
+      import MyMath from './export.js';
+      console.log(MyMath.plus(10, 20));
+      console.log(MyMath.minus(10, 20));
+      console.log(MyMath.avg(10, 20, 30));
+      console.log(MyMath.sum(10, 20, 30));
+    </script>
+  </body>
 </html>
