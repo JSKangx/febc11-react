@@ -1,17 +1,23 @@
-function func(data1, data2){
-	
+function func(data1, data2) {
+  data1 += 10;
+  data2[0] += 10;
+  console.log(data1, data2[0]);
 }
 
-var d1 = 80;  // number
-var d2 = [80];  // array(object)
+var d1 = 80; // number
+var d2 = [80]; // array(object)
 
 console.log(typeof d1, typeof d2);
 
 console.log('===== 함수 호출 이전 =====');
-console.log(d1, d2[0]);
+console.log(d1, d2[0]); // 80 80
 
-console.log('===== 함수 호출 =====');
-func(d1, d2);
+console.log('===== 함수 내부 호출 =====');
+func(d1, d2); // 90 90
 
 console.log('===== 함수 호출 이후 =====');
-console.log(d1, d2[0]);
+
+// (1) d1은 원시타입이기 때문에, data1은 d1의 값을 그대로 복사해서 새로운 메모리에 저장한다. 함수는 data1의 값을 증가시키는 것이기 때문에 d1의 값은 변경이 안 된다.
+// (2) d2는 객체이기 때문에 애초에 d2에는 객체의 값이 저장되는 게 아니라 객체가 있는 메모리 주소가 저장된다. 그래서, data2는 d2의 값을 복사해올 때 d2에 저장된 주소를 복사해서 가져온다. 함수 내부에서 data2를 수정하면 해당 메모리 주소를 찾아가 그 메모리 주소 안에 있는 값을 수정하기에 d2의 값도 변경된다.
+// (3) 원시타입은 메모리 크기가 작기에 값 자체가 변수에 저장되고, 객체타입은 메모리 크기가 크기 때문에 주소가 변수에 저장된다. 주소는 크기가 작다.
+console.log(d1, d2[0]); // 80 90
