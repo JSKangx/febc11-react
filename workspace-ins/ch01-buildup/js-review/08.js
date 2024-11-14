@@ -4,8 +4,14 @@ var isPrime = function(num){
   console.log('소수 판별 시작.', num);
 
   // TODO: 소수 판별 코드
-  let prime = true;
+  let prime = num > 1; // 1은 소수가 아님
 
+  for(let i=2; i<num; i++){
+    if(num % i === 0){
+      prime = false;
+      break;
+    }
+  }
 
   console.log('소수 판별 결과.', prime);
   console.timeEnd('소요 시간');
@@ -21,6 +27,6 @@ isPrime(6);
 isPrime(7);
 isPrime(8);
 isPrime(9);
-isPrime(1000000007);
+isPrime(1000000007); // 십억칠
 isPrime(1000000007);
 isPrime(1000000007);
