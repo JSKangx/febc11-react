@@ -7,7 +7,7 @@ const EditAddress = ({ addressBook, handleAddressChange }) => {
         <label htmlFor={address.id}>{address.name} : </label>
         <input
           type='text'
-          name={address.id}
+          name={address.name}
           id={address.id}
           value={address.value}
           onChange={handleAddressChange}

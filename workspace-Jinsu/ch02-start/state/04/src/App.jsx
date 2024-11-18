@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import EditAddress from './components/EditAddress';
+import { produce } from 'immer';
 
 function App() {
   const [user, setUser] = useState({
@@ -42,23 +43,33 @@ function App() {
 
     // 상태의 불변성을 지키기 위해 복잡한 추가 작업 필요
     // map으로 돌면서 바뀐놈만 찾아서 새로운 객체로 교체
-    const newAddressBook = user.extra.addressBook.map(address => {
-      if (address.id === Number(event.target.name)) {
-        // address의 나머지 속성은 그대로 두고, value만 바뀐 value로 바뀜.
-        return { ...address, value: event.target.value };
-      } else {
-        return address;
-      }
-    });
+    // const newAddressBook = user.extra.addressBook.map(address => {
+    //   if (address.id === Number(event.target.name)) {
+    //     // address의 나머지 속성은 그대로 두고, value만 바뀐 value로 바뀜.
+    //     return { ...address, value: event.target.value };
+    //   } else {
+    //     return address;
+    //   }
+    // });
 
-    const newState = {
-      ...user,
-      // extra도 새로운 객체로 만든다.
-      extra: {
-        ...user.extra, // extra의 나머지 멤버는 그대로쓰고,
-        addressBook: newAddressBook, // addressBook만 새로운 객체로
-      },
-    };
+    // const newState = {
+    //   ...user,
+    //   // extra도 새로운 객체로 만든다.
+    //   extra: {
+    //     ...user.extra, // extra의 나머지 멤버는 그대로쓰고,
+    //     addressBook: newAddressBook, // addressBook만 새로운 객체로
+    //   },
+    // };
+
+    // immer 라이브러리를 사용하여 상태 불변성 유지
+    // produce(복사할 객체, 복사할 객체가 인수로 전달되는 콜백 함수 : 수정할 값 입력)
+    // immer가 draft에 수정된 값을 체크해보고, 라인을 따라 계속 부모 객체를 새로운 객체로 교체해주고, 최상위 객체를 새롭게 만들어 리턴해준다.
+    const newState = produce(user, draft => {
+      const address = draft.extra.addressBook.find(
+        address => address.id === Number(event.target.name)
+      );
+      address.value = event.target.value;
+    });
 
     // 회사 주소가 변경될 경우에 기대하는 값
     console.log('user', user === newState); // false
