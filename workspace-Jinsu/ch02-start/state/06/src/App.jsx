@@ -14,7 +14,7 @@ function App() {
   // useForm으로 상태 관리
   const {
     register,
-    handleSumbit,
+    handleSubmit,
     watch,
     formState: { errors },
   } = useForm({
@@ -34,7 +34,7 @@ function App() {
     <>
       <h1>06 회원가입 입력값 검증 (feat. react-hook-form)</h1>
 
-      <form onSubmit={handleSumbit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <label htmlFor='name'>이름</label>
         <input
           id='name'
