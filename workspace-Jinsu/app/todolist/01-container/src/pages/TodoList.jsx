@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import TodoItem from '@pages/TodoItem';
 
 function TodoList({ itemList, deleteItem, toggleDone }) {
@@ -6,5 +7,11 @@ function TodoList({ itemList, deleteItem, toggleDone }) {
   ));
   return <ul className='todolist'>{list}</ul>;
 }
+
+TodoList.propTypes = {
+  itemList: PropTypes.array.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+  toggleDone: PropTypes.func.isRequired,
+};
 
 export default TodoList;
