@@ -18,6 +18,10 @@ function App() {
     watch,
     formState: { errors },
   } = useForm({
+    mode: 'onSubmit', // 검증 타이밍 옵션 (기본값 : onSubmit),
+    reValidateMode: 'onChange', // 재검증 타이밍 옵션 (기본값 : onChange)
+    // errors 객체에 첫 에러 하나만 포함하거나(firstError) 전부 포함(all). 기본값 : firstError. all로 설정하면, console에 errors 객체를 찍어보면 에러메시지가 전부 넘어오는 걸 알 수 있다. 그 중에서 골라서 쓰거나 전부 쓰면 된다.
+    criteriaMode: 'firstError',
     defaultValues: {
       name: '',
       email: '',
@@ -43,6 +47,10 @@ function App() {
             minLength: {
               value: 2,
               message: '2글자 이상 입력하세요.',
+            },
+            pattern: {
+              value: /^[^\d]*$/, // 숫자는 포함할수 없음
+              message: '숫자는 입력할 수 없습니다.',
             },
           })}
         />
