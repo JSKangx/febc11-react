@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 function TodoItem({ item, deleteItem, toggleDone }) {
   return (
     <li>
@@ -11,5 +13,16 @@ function TodoItem({ item, deleteItem, toggleDone }) {
     </li>
   );
 }
+
+TodoItem.propTypes = {
+  // item: PropTypes.object.isRequired, // 이렇게 간단하게 적어도 되고
+  item: PropTypes.shape({
+    _id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    done: PropTypes.bool, // 없어도 된다. 없으면 자동으로 undefined > Falsy값
+  }),
+  toggleDone: PropTypes.func.isRequired,
+  deleteItem: PropTypes.func.isRequired,
+};
 
 export default TodoItem;
