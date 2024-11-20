@@ -1,6 +1,6 @@
 import Todo from '@pages/Todo';
 import ToDoReducer from '@pages/TodoReducer';
-import { useReducer, useState } from 'react';
+import { useReducer, useRef } from 'react';
 
 const TodoContainer = () => {
   // 샘플 목록 상태
@@ -10,15 +10,15 @@ const TodoContainer = () => {
     { _id: 3, title: '라면', done: true },
   ];
   const [itemList, itemListDispatch] = useReducer(ToDoReducer, sampleItemList);
-  const [nextId, setNextId] = useState(sampleItemList.length + 1);
+  const nextId = useRef(sampleItemList.length + 1);
 
   // 할일 추가
   const addItem = title => {
     itemListDispatch({
       type: 'ADD',
-      value: { _id: nextId, title: title, done: false },
+      value: { _id: nextId.current, title: title, done: false },
     });
-    setNextId(parseInt(nextId) + 1);
+    nextId.current += 1;
   };
 
   // 할일 완료/미완료 처리

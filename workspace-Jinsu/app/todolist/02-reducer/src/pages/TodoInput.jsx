@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 function TodoInput({ addItem }) {
@@ -9,12 +9,15 @@ function TodoInput({ addItem }) {
     -> 이렇게 하면 dom api로 title을 꺼내오지 않아도 된다.
   */
   const [title, setTitle] = useState('');
-  const [nextId, setNextId] = useState('4');
+
+  // focus를 위한 DOM 객체 접근
+  const inputElem = useRef(null);
 
   const handleAdd = () => {
     if (title.trim() !== '') {
       addItem(title);
       setTitle('');
+      inputElem.current.focus();
     }
   };
 
@@ -27,6 +30,7 @@ function TodoInput({ addItem }) {
       <input
         type='text'
         autoFocus
+        ref={inputElem}
         onKeyUp={event => handleKeyUp(event)}
         value={title}
         onChange={event => setTitle(event.target.value)}
