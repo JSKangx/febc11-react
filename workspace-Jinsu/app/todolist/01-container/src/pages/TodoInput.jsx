@@ -9,14 +9,10 @@ function TodoInput({ addItem }) {
     -> 이렇게 하면 dom api로 title을 꺼내오지 않아도 된다.
   */
   const [title, setTitle] = useState('');
-  const [nextId, setNextId] = useState('4');
 
   const handleAdd = () => {
     if (title.trim() !== '') {
-      const item = { _id: parseInt(nextId), title, done: false };
-      addItem(item);
-
-      setNextId(parseInt(nextId) + 1);
+      addItem(title);
       setTitle('');
     }
   };

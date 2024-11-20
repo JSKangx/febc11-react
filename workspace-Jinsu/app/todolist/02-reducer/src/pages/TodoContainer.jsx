@@ -1,6 +1,6 @@
 import Todo from '@pages/Todo';
-import { produce } from 'immer';
-import { useState } from 'react';
+import ToDoReducer from '@pages/TodoReducer';
+import { useReducer, useState } from 'react';
 
 const TodoContainer = () => {
   // 샘플 목록 상태
@@ -9,32 +9,32 @@ const TodoContainer = () => {
     { _id: 2, title: '계란', done: false },
     { _id: 3, title: '라면', done: true },
   ];
-  const [itemList, setItemList] = useState(sampleItemList);
+  const [itemList, itemListDispatch] = useReducer(ToDoReducer, sampleItemList);
+  const [nextId, setNextId] = useState(sampleItemList.length + 1);
 
   // 할일 추가
-  const addItem = item => {
-    // 새로운 배열을 만들어 push해 주고, 새로운 배열을 set해주면 된다.
-    const newItemList = [...itemList, item];
-    setItemList(newItemList);
+  const addItem = title => {
+    itemListDispatch({
+      type: 'ADD',
+      value: { _id: nextId, title: title, done: false },
+    });
+    setNextId(parseInt(nextId) + 1);
   };
 
   // 할일 완료/미완료 처리
   const toggleDone = _id => {
-    // immer 라이브러리를 이용한 상태 불변성 유지 & 리렌더링
-    // 객체 안에 하나의 속성에 대해서만 바꾸는 거기 때문에 immer를 써야 불변성 유지 가능.
-    const newItemList = produce(itemList, draft => {
-      const item = draft.find(item => item._id === _id);
-      item.done = !item.done;
+    itemListDispatch({
+      type: 'TOGGLE',
+      value: { _id },
     });
-
-    setItemList(newItemList);
   };
 
   // 할일 삭제
   const deleteItem = _id => {
-    // 할일 삭제할 때는 배열 안에 객체를 통으로 제거하는 것이기 때문에 immer를 안 써도 불변성 유지 가능.
-    const newItemList = itemList.filter(item => item._id !== _id);
-    setItemList(newItemList);
+    itemListDispatch({
+      type: 'DELETE',
+      value: { _id },
+    });
   };
 
   return (

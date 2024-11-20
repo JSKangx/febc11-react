@@ -1,7 +1,7 @@
 function Header() {
   return (
     <header>
-      <h1>Todo List - 기능 추가</h1>
+      <h1>01 Todo List - container 컴포넌트 추가</h1>
     </header>
   );
 }
