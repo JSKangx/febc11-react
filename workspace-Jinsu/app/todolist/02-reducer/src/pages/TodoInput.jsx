@@ -13,10 +13,7 @@ function TodoInput({ addItem }) {
 
   const handleAdd = () => {
     if (title.trim() !== '') {
-      const item = { _id: parseInt(nextId), title, done: false };
-      addItem(item);
-
-      setNextId(parseInt(nextId) + 1);
+      addItem(title);
       setTitle('');
     }
   };
