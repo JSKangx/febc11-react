@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useReducer, useState } from 'react';
 import Button from './Button';
 import PropTypes from 'prop-types';
 
@@ -20,18 +20,6 @@ function Counter({ children = '0' }) {
   const handleReset = event => {
     countDispatch({ type: 'RESET', value: initCount });
   };
-
-  // cleanup 함수를 지정해주지 않으면, timer가 누적되어 계속 실행된다.
-  // useEffect(() => {
-  //   console.log(step, 'setup 함수 호출');
-  //   const timer = setInterval(() => {
-  //     console.log(step, new Date());
-  //   }, 1000);
-  //   return () => {
-  //     console.log(step, 'cleanup 함수 호출');
-  //     clearInterval(timer);
-  //   };
-  // }, [step]);
 
   return (
     <div

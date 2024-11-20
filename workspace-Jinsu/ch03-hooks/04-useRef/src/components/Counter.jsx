@@ -44,7 +44,9 @@ function Counter({ children = '0' }) {
         ref={stepElem}
         type='number'
         style={{ width: '40px' }}
+        // 이건 초기값만 설정해주는 속성이다. 증감시켰을 때 화면에 값이 변하는 것은 리액트가 하는 게 아니라 브라우저가 하는 것.
         defaultValue={step.current}
+        // 리액트는 step.current 값 (데이터)만 변경시킨다.
         onChange={e => (step.current = Number(e.target.value))}
       />
       <Button type='button' onClick={handleDown}>
