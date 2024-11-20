@@ -10,7 +10,10 @@ function Counter({ children = '0' }) {
   const initCount = Number(children);
   const [count, countDispatch] = useReducer(counterReducer, initCount);
   // 증감치가 변한다고 해서 화면 Counter 전체가 리렌더링 될 필요는 없다.
+  // 그렇다고 브라우저가 쌩으로 관리하게 하면 이 값을 꺼내기 위해 DOM 노드에 접근해야 한다.
+  // 그래서 화면은 리렌더링하지 않지만 리액트로 값을 접근할 수 있는 useRef를 쓰는 것이다.
   const step = useRef(1); // { current : 1 } 반환
+  const stepElem = useRef(null); // DOM에 접근
 
   const handleDown = () => {
     countDispatch({ type: 'DOWN', value: step.current });
@@ -20,6 +23,7 @@ function Counter({ children = '0' }) {
   };
   const handleReset = event => {
     countDispatch({ type: 'RESET', value: initCount });
+    stepElem.current.focus();
   };
 
   return (
@@ -37,6 +41,7 @@ function Counter({ children = '0' }) {
       <label htmlFor='step'>증감치</label>
       <input
         id='step'
+        ref={stepElem}
         type='number'
         style={{ width: '40px' }}
         defaultValue={step.current}
