@@ -1,6 +1,6 @@
 import Todo from "@pages/Todo";
 import TodoReducer from "@pages/TodoReducer";
-import { useReducer, useRef, useState } from "react";
+import { useCallback, useReducer, useRef, useState } from "react";
 
 function TodoContainer(){
   // 샘플 목록
@@ -10,6 +10,10 @@ function TodoContainer(){
     { _id: 3, title: '라면', done: true },
     { _id: 4, title: '김치', done: true },
   ];
+
+  // for(let i=5; i<=10000; i++){
+  //   sampleItemList.push({ _id: i, title: `샘플-${i}`, done: false });
+  // }
 
   const [itemList, itemListDispatch] = useReducer(TodoReducer, sampleItemList);
   // const [nextId, setNextId] = useState(sampleItemList.length+1);
@@ -24,14 +28,16 @@ function TodoContainer(){
   };
 
   // 할일 완료/미완료 처리
-  const toggleDone = (_id) => {
+  // TODO: 2. useCallback으로 함수를 메모이제이션
+  const toggleDone = useCallback((_id) => {
     itemListDispatch({ type: 'TOGGLE', value: { _id } });
-  };
+  }, []);
 
   // 할일 삭제
-  const deleteItem = (_id) => {
+  // TODO: 2. useCallback으로 함수를 메모이제이션
+  const deleteItem = useCallback((_id) => {
     itemListDispatch({ type: 'DELETE', value: { _id } });
-  };
+  }, []);
 
   return (
     <Todo itemList={ itemList } addItem={ addItem } toggleDone={ toggleDone } deleteItem={ deleteItem } />

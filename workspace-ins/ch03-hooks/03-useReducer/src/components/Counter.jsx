@@ -53,7 +53,7 @@ function Counter({ children = '0' }){
 // state: 이전 상태(useReducer가 내부적으로 관리, 이전의 리턴값이 다음의 state로 전달)
 // action: 동작을 정의한 객체(자유롭게 작성. 일반적으로 type 속성에 동작을, value 속성에 값을 지정)
 // 리턴값: 새로운 상태
-function counterReducer(state, action){ // (6, { type: 'UP', value: 1 })
+function counterReducer(state, action){ // (6, { type: 'UP', value: 1 }) => 7
   let newState;
 
   switch(action.type){

@@ -14,6 +14,7 @@ function Counter({ children = '0' }){
 
   // const [step, setStep] = useState(1);
   const step = useRef(1); // { current: 1 } 반환
+  const stepElem = useRef(null);
   
   const handleDown = () => {
     countDispatch({ type: 'DOWN', value: step.current });
@@ -24,13 +25,16 @@ function Counter({ children = '0' }){
   const handleReset = event => {
     // setCount(initCount);
     countDispatch({ type: 'RESET', value: initCount });
+    // const stepElem = document.querySelector('#step');
+    console.log(stepElem);
+    stepElem.current.focus();
   };
 
   return (
     <div id="counter">
       <label htmlFor="step">증감치</label>
       {/* 비제어 컴포넌트 value, onChange 사용 */}
-      <input id="step" type="number" style={{ width: '40px' }} defaultValue={ step.current } 
+      <input id="step" type="number" style={{ width: '40px' }} defaultValue={ step.current } ref={ stepElem }
         onChange={ e => step.current = Number(e.target.value) } />
       <Button color="red" onClick={ handleDown }>-</Button>
       <Button onClick={ handleReset }>{ initCount }</Button>
