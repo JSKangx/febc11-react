@@ -1,13 +1,8 @@
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 
-Product.propTypes = {
-  name: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  mainImage: PropTypes.string.isRequired,
-  content: PropTypes.string.isRequired,
-};
-
-function Product({ name, price, mainImage, content }) {
+const Product = memo(function Product({ name, price, mainImage, content }) {
+  console.log('Product 렌더링');
   return (
     <>
       <h2>상품 설명</h2>
@@ -20,6 +15,14 @@ function Product({ name, price, mainImage, content }) {
       </div>
     </>
   );
-}
+});
+
+// 함수 표현식으로 컴포넌트를 선언하면 Product에 접근하려면 함수 선언 다음에 써야 한다.
+Product.propTypes = {
+  name: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  mainImage: PropTypes.string.isRequired,
+  content: PropTypes.string.isRequired,
+};
 
 export default Product;
