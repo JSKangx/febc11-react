@@ -1,11 +1,7 @@
 import PropTypes from 'prop-types';
+import { memo } from 'react';
 
-Shipping.propTypes = {
-  handlePayment: PropTypes.func.isRequired,
-  fees: PropTypes.number.isRequired,
-};
-
-function Shipping({ fees, handlePayment }) {
+const Shipping = memo(function Shipping({ fees, handlePayment }) {
   return (
     <>
       <h2>배송비</h2>
@@ -18,6 +14,11 @@ function Shipping({ fees, handlePayment }) {
       </button>
     </>
   );
-}
+});
+
+Shipping.propTypes = {
+  handlePayment: PropTypes.func.isRequired,
+  fees: PropTypes.number.isRequired,
+};
 
 export default Shipping;

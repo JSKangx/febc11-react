@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import Product from './Product';
 import Shipping from './Shipping';
 
@@ -29,9 +29,9 @@ function App() {
   };
 
   // 결제 버튼 누르면 결제 메시지
-  const handlePayment = () => {
+  const handlePayment = useCallback(() => {
     alert('상품을 결제하시겠습니까?');
-  };
+  }, []);
 
   return (
     <>
