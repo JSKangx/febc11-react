@@ -1,6 +1,7 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import Product from './Product';
 import Shipping from './Shipping';
+import Product2 from './Product2';
 
 function App() {
   // 아래 data가 API 서버로부터 조회해 온 결과라고 가정
@@ -16,6 +17,13 @@ function App() {
       '나이키가 세계적인 무대에 오르는 브레이크 댄서를 위해 제작한 첫 신발인 잼과 함께 몸과 마음, 정신을 하나로 만들어 보세요. 신발의 모든 디테일을 꼼꼼히 제작했기 때문에 자신 있게 사이퍼에 도전할 수 있습니다. 유연하고 내구성이 뛰어난 갑피가 몸을 따라 움직이며, 중창의 텍스처 처리된 핸드 그립 덕분에 공중에서 신발을 쉽게 잡을 수 있습니다. 그리고 위아래가 뒤집힌 로고를 배치해 프리즈 동작을 할 때 로고가 똑바로 보이는 재미를 더했죠.',
   };
 
+  const returnData = () => {
+    return data;
+  };
+  const memoizedData = useMemo(() => {
+    return returnData();
+  }, []);
+
   const [qty, setQty] = useState(1);
   const [shippingFees, setShippingFees] = useState(data.shippingFees);
 
@@ -29,20 +37,28 @@ function App() {
   };
 
   // 결제 버튼 누르면 결제 메시지
+  // const handlePayment = useCallback(() => {
+  //   alert('상품을 결제하시겠습니까?');
+  // }, []);
+
+  // useCallback 함수 안에 또 콜백 함수가 있기에, useCallback 함수가 생성될 당시의 'shippingFees'를 콜백함수가 기억(클로저)하기 때문에, deps를 빈배열로 두면 배송비가 바뀌어도 여전히 생성될 당시의 배송비가 저장됨.
+  // 그래서 deps에 배송비를 넣어줘서 캐시된 걸 버리고 새로운 함수가 만들어지도록 해줘야 함.
   const handlePayment = useCallback(() => {
-    alert('상품을 결제하시겠습니까?');
-  }, []);
+    alert(`배송비 ${shippingFees}원이 추가됩니다. 상품을 결제하시겠습니까?`);
+  }, [shippingFees]);
 
   return (
     <>
       <h1>06 useCallback(함수 자체를 memoize), React.memo(컴포넌트를 memoize)</h1>
 
-      <Product
+      {/* <Product
         name={data.name}
         price={data.price}
         mainImage={data.mainImage}
         content={data.content}
-      />
+      /> */}
+
+      <Product2 product={memoizedData} />
 
       <h2>수량 선택</h2>
       <div>
