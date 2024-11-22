@@ -1,0 +1,12 @@
+a {
+  margin: 0 10px 0 5px;
+  padding: 5px;
+}
+
+.menu {
+  background-color: white;
+}
+
+.menu-dark {
+  background-color: gray;
+}
