@@ -36,8 +36,7 @@ function App() {
       });
       setData(null);
     } finally {
-      // try, catch 블럭 중 어떤 것이 완료되든 무조건 실행되는 코드.
-      // 성공이든 실패든 로딩은 끝난 거니까.
+      // try, catch 블럭 중 어떤 것이 완료되든 무조건 실행되는 코드. 성공이든 실패든 로딩은 끝난 거니까.
       // finally를 안 써도 기능적으로는 똑같지만, 직관적으로 코드를 알아보게 하기 위해 같이 묶어준다.
       setIsLoading(false);
     }

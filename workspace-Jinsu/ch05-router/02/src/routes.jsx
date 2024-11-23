@@ -5,14 +5,14 @@ import Page2 from './Page2';
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
 // 라우팅 규칙
-// createBrowserRouter([{라우팅 규칙 객체}], {})
+// createBrowserRouter([{라우팅 규칙 객체}], {추가 옵션})
 const router = createBrowserRouter(
   [
     {
       path: '/',
       // '/'까지 일치하면 Layout을 렌더링
-      // 그 다음 세부 경로가 뭐냐에 따라서 Outlet 들어갈 자리에 아래 엘리먼트를 쓴다.
       element: <Layout />,
+      // 그 다음 세부 경로가 뭐냐에 따라서 Outlet 들어갈 자리에 아래 엘리먼트를 쓴다.
       children: [
         // index: true - 해당 라우팅 규칙이 부모 경로의 기본 경로를 담당한다.
         { index: true, element: <Navigate to='/home' /> },
