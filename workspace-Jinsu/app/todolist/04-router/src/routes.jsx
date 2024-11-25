@@ -19,7 +19,7 @@ const router = createBrowserRouter(
         { path: 'about', element: <About /> },
         { path: 'list', element: <TodoList /> },
         { path: 'todoadd', element: <TodoAdd /> },
-        { path: 'tododetail', element: <TodoDetail /> },
+        { path: 'list/:_id', element: <TodoDetail /> },
         { path: 'todoedit', element: <TodoEdit /> },
         { path: '*', element: <ErrorPage /> },
       ],

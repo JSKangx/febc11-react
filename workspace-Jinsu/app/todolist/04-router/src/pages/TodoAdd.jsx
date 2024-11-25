@@ -12,7 +12,7 @@ function TodoAdd() {
           <label htmlFor='content'>내용 :</label>
           <textarea id='content' cols='23' rows='5'></textarea>
           <br />
-          <Link to='/tododetail'>추가</Link>
+          <Link to='/list/1'>추가</Link>
           <Link to='/list'>취소</Link>
         </form>
       </div>
