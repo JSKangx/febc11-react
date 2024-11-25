@@ -5,7 +5,7 @@ function TodoList() {
     <div id='main'>
       <h2>할일 목록</h2>
       <div className='todo'>
-        <Link to='/todoadd'>추가</Link>
+        <Link to='/list/add'>추가</Link>
         <br />
         <form className='search'>
           <input type='text' autoFocus />

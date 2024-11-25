@@ -13,15 +13,18 @@ const router = createBrowserRouter(
     {
       path: '/',
       element: <Layout />,
+      errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Navigate to='/home' /> },
         { path: 'home', element: <Home /> },
         { path: 'about', element: <About /> },
         { path: 'list', element: <TodoList /> },
-        { path: 'todoadd', element: <TodoAdd /> },
-        { path: 'list/:_id', element: <TodoDetail /> },
-        { path: 'todoedit', element: <TodoEdit /> },
-        { path: '*', element: <ErrorPage /> },
+        { path: 'list/add', element: <TodoAdd /> },
+        {
+          path: 'list/:_id',
+          element: <TodoDetail />,
+          children: [{ path: 'todoedit', element: <TodoEdit /> }],
+        },
       ],
     },
   ],
