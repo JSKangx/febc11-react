@@ -18,6 +18,7 @@ function useFetch(fetchParams) {
       const res = await fetch(API_SERVER + params.url);
       const jsonData = await res.json();
 
+      // fetch는 200번대 응답이 아니어도 응답이 오기만 하면 try 문 안에서 해결해야 한다. 즉, 여러 응답에 대한 조건문을 설정해야 한다는 의미.
       // ok == 1 == true
       if (jsonData.ok) {
         // 결과 데이터를 data 상태에 담아줌

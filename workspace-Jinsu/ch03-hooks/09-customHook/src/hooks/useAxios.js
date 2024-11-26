@@ -19,8 +19,8 @@ function useAxios(fetchParams) {
       setIsLoading(true);
       const res = await axios.get(params.url);
 
-      // axios는 200번대 응답(ok)이 아니면 catch 블록으로 보내버린다. 그래서 ok를 확인할 필요가 없다.
-      // items 배열을 data에 담아줌
+      // axios는 200번대 응답(ok, 성공)이 아니면 catch 블록으로 보내버린다. 그래서 ok를 확인할 필요가 없다.
+      // 받은 응답으로 data 상태 업데이트
       setData(res.data);
       setError(null);
     } catch (err) {

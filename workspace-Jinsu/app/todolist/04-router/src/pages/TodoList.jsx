@@ -39,6 +39,7 @@ function TodoList() {
   };
 
   // 처음에 마운트될 때는 data === null이기 때문에 마운트된 이후에 useEffect가 호출되면 data가 DUMMY_DATA로 채워진다.
+  // data?. : 옵셔널 체이닝 연산자로 조건부로 렌더링되는 덕분에 data가 undefined일 때도 오류 없이 동작한다.
   const itemList = data?.items.map((item) => (
     <TodoListItem key={item._id} item={item} handleDelete={handleDelete} />
   ));

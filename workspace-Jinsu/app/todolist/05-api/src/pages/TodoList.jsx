@@ -44,13 +44,15 @@ function TodoList() {
   };
 
   // 서버로부터 리스트를 조회해오는 함수 정의
+  // (1) 최초 마운트 이후 (2) 데이터를 삭제할 때 호출됨
   async function fetchList() {
     const res = await myAxios.get('/todolist');
-    setData(res.data);
+    // 리스트를 받아와서 data 상태를 업데이트한다.
     console.log(res.data);
+    setData(res.data);
   }
 
-  // 최초 컴포넌트 마운트 이후에 리스트 받아오기
+  // 최초 컴포넌트 마운트 이후에 fetchList 함수 호출
   useEffect(() => {
     fetchList();
   }, []);
