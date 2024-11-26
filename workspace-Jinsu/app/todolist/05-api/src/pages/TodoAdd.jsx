@@ -6,7 +6,8 @@ function TodoAdd() {
   const {
     register,
     handleSubmit,
-    watch,
+    reset,
+    setFocus,
     formState: { errors },
   } = useForm();
 
@@ -25,11 +26,19 @@ function TodoAdd() {
       if (xhr.status >= 200 && xhr.status < 300) {
         console.log(xhr.response);
         alert('할 일이 추가되었습니다.');
+        setFocus('title');
+        reset();
       } else {
         // 400 ~ 500번대 응답
-        console.log('서버에서 에러 응답', xhr.status, xhr.response);
-        alert('할 일 추가에 실패했습니다.');
+        console.error('서버에서 에러 응답', xhr.status, xhr.response);
+        alert(xhr.response.error?.message || '할 일 추가에 실패했습니다.');
       }
+    };
+
+    // 네트워크 이벤트가 발생했을 때 에러처리
+    xhr.onerror = () => {
+      console.error('네트워크 에러');
+      alert('할 일 추가에 실패했습니다.');
     };
 
     xhr.send(JSON.stringify(item));
