@@ -22,7 +22,7 @@ function TodoAdd() {
 
     const xhr = new XMLHttpRequest();
 
-    xhr.open('POST', 'https://todo-api.fesp.shop/api/todolist?delay=10000');
+    xhr.open('POST', 'https://todo-api.fesp.shop/api/todolist');
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.responseType = 'json';
 

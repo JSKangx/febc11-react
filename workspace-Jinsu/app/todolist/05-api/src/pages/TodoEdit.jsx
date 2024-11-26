@@ -1,3 +1,5 @@
+import useAxiosInstance from '@hooks/useAxiosInstance';
+import { useForm } from 'react-hook-form';
 import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 
 function TodoEdit() {
@@ -8,19 +10,32 @@ function TodoEdit() {
   // 페이지를 이동할 수 있는 navigate 함수 반환
   const navigate = useNavigate();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      title: item.title,
+      content: item.content,
+      done: item.done,
+    },
+  });
+
+  // 미리 만들어 놓은 커스텀 axios instance를 받아온다.
+  const myAxios = useAxiosInstance();
+
   // 수정 작업
-  const onSubmit = (e) => {
+  const onSubmit = async (formData) => {
     // 서버에 변경을 발생시키는 것이기 때문에 사용자에게 결과를 정확히 고지해줘야 한다.
     try {
-      // 기본 동작 실행 방지
-      e.preventDefault();
-      // API 서버에 수정 요청 했다고 치고
+      // 사용자의 액션(이벤트 핸들러)을 필요로 하는 서버 통신은 훅으로는 못 쓴다.
+      // 액시오스 커스텀 인스턴스로 서버 요청
+      await myAxios.patch(`/todolist/${item._id}`, formData);
+
       alert('할일이 수정되었습니다.');
       // 할일 상세보기로 이동
-      // 한 페이지 위로 이동, relative: true - 상대 경로로 사용
-      // navigate('..', { relative: true, replace: true }); // replace 해도, 뒤로가기 버튼 누르면 한번 더 상세 페이지에 머무르는 건 똑같다.
-      // navigate(`/list/${item._id}`); // 절대 경로로 이동하는 것도 가능
-      navigate(-1); // 수정 버튼 누르면 뒤로가기 한번 (수정되기 전 상세 페이지를 보여주는 거랑은 다른 문제)
+      navigate(-1); // 수정 버튼 누르면 뒤로가기
     } catch (err) {
       console.error(err);
       alert('할일 수정에 실패했습니다.');
@@ -31,18 +46,34 @@ function TodoEdit() {
     <div id='main'>
       <h2>할일 수정</h2>
       <div className='todo'>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <label htmlFor='title'>제목 :</label>
-          <input type='text' id='title' defaultValue={item.title} autoFocus />
+          <input
+            type='text'
+            id='title'
+            autoFocus
+            {...register('title', {
+              required: '할일을 입력하세요.',
+            })}
+          />
+          <div className='input-error'>{errors.title?.message}</div>
           <br />
           <label htmlFor='content'>내용 :</label>
-          <textarea id='content' cols='23' rows='5' defaultValue={item.content} />
+          <textarea
+            id='content'
+            cols='23'
+            rows='5'
+            {...register('content', {
+              required: '내용을 입력하세요.',
+            })}
+          />
+          <div className='input-error'>{errors.content?.message}</div>
           <br />
           <label htmlFor='done'>완료 :</label>
-          <input type='checkbox' id='done' defaultChecked />
+          <input type='checkbox' id='done' {...register('done')} />
           <br />
           <button type='submit'>수정</button>
-          <Link to='/list/1'>취소</Link>
+          <Link to={`/list/${item._id}`}>취소</Link>
         </form>
       </div>
     </div>

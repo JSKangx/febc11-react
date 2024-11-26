@@ -1,3 +1,4 @@
+import useAxiosInstance from '@hooks/useAxiosInstance';
 import useFetch from '@hooks/useFetch';
 import TodoListItem from '@pages/TodoListItem';
 import { useEffect, useState } from 'react';
@@ -28,13 +29,17 @@ function TodoList() {
   // API 서버에서 목록조회
   const { data } = useFetch({ url: '/todolist' });
 
+  // 미리 만들어 놓은 커스텀 axios instance를 받아온다.
+  const myAxios = useAxiosInstance();
+
   // 삭제 작업
-  const handleDelete = (_targetId) => {
+  const handleDelete = async (_targetId) => {
     // 서버에 변경을 발생시키는 것이기 때문에 사용자에게 결과를 정확히 고지해줘야 한다.
     try {
-      // API 서버에 삭제 요청 했다고 치고
+      // API 서버에 삭제 요청
+      const res = await myAxios.delete(`/todolist/${_targetId}`);
+      console.log(res);
       alert('할일이 삭제되었습니다.');
-
       // API 서버에서 변경된 목록을 다시 조회해 오기
     } catch (err) {
       console.error(err);
