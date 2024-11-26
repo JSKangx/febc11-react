@@ -1,31 +1,38 @@
+import useAxiosInstance from "@hooks/useAxiosInstance";
+import useFetch from "@hooks/useFetch";
 import TodoListItem from "@pages/TodoListItem";
 import { useEffect, useState } from "react";
 import { Link, Outlet } from "react-router-dom";
 
-const dummyData = {
-  items: [{
-    _id: 1,
-    title: '잠자기',
-  }, {
-    _id: 2,
-    title: '자바스크립트 복습',
-    done: true,
-  }]
-};
+// const dummyData = {
+//   items: [{
+//     _id: 1,
+//     title: '잠자기',
+//   }, {
+//     _id: 2,
+//     title: '자바스크립트 복습',
+//     done: true,
+//   }]
+// };
 
 function TodoList() {
 
-  const [data, setData] = useState();
+  // const [data, setData] = useState();
+  // useEffect(() => {
+  //   setData(dummyData);
+  // }, []); // 마운트된 후에 한번만 호출
 
-  useEffect(() => {
-    setData(dummyData);
-  }, []); // 마운트된 후에 한번만 호출
+  // API 서버에서 목록 조회
+  const { data } = useFetch({ url: '/todolist' });
+
+  // axios 인스턴스
+  const axios = useAxiosInstance();
 
   // 삭제 작업
-  const handleDelete = (_id) => {
+  const handleDelete = async (_id) => {
     try{
       // TODO: API 서버에 삭제 요청
-  
+      await axios.delete(`/todolist/${ _id }`);
       alert('할일이 삭제 되었습니다.');
 
       // TODO: 목록을 다시 조회
