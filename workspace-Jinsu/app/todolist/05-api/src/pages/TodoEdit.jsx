@@ -4,7 +4,7 @@ import { Link, useNavigate, useOutletContext } from 'react-router-dom';
 
 function TodoEdit() {
   // Outlet 컴포넌트의 context 속성에 전달되는 값 추출
-  const { item } = useOutletContext();
+  const { item, refetch } = useOutletContext();
 
   // 프로그래밍 방식으로 페이지 이동에 사용
   // 페이지를 이동할 수 있는 navigate 함수 반환
@@ -34,8 +34,9 @@ function TodoEdit() {
       await myAxios.patch(`/todolist/${item._id}`, formData);
 
       alert('할일이 수정되었습니다.');
-      // 할일 상세보기로 이동
-      navigate(-1); // 수정 버튼 누르면 뒤로가기
+      // 수정 버튼 누르면 뒤로가기(할일 상세보기)로 이동
+      navigate(-1);
+      refetch();
     } catch (err) {
       console.error(err);
       alert('할일 수정에 실패했습니다.');

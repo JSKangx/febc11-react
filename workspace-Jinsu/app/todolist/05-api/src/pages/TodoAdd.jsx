@@ -1,7 +1,10 @@
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 
 function TodoAdd() {
+  // 페이지를 이동할 수 있는 navigate 함수 반환
+  const navigate = useNavigate();
+
   // useForm으로 상태 관리
   const {
     register,
@@ -34,6 +37,8 @@ function TodoAdd() {
         alert('할 일이 추가되었습니다.');
         setFocus('title');
         reset();
+        // 할일 추가 완료 후 해당 할일 상세 페이지로 리다이렉트
+        navigate(`/list/${xhr.response.item._id}`);
       } else {
         // 400 ~ 500번대 응답
         console.error('서버에서 에러 응답', xhr.status, xhr.response);

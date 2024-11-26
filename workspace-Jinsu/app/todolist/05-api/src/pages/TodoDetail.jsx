@@ -1,4 +1,5 @@
 import useAxios from '@hooks/useAxios';
+import useAxiosInstance from '@hooks/useAxiosInstance';
 import { useEffect, useState } from 'react';
 import { Link, Outlet, useParams } from 'react-router-dom';
 
@@ -20,14 +21,27 @@ function TodoDetail() {
   const { _id } = useParams();
   console.log(_id);
 
-  // const [data, setData] = useState();
+  const [data, setData] = useState();
 
   // useEffect(() => {
   //   // API 서버 통신 전 임시로 데이터 출력
   //   setData(DUMMY_DATA);
   // }, []);
 
-  const { data } = useAxios({ url: `/todolist/${_id}` });
+  // useAxios를 사용하는 대신
+  // const { data } = useAxios({ url: `/todolist/${_id}` });
+
+  const myAxios = useAxiosInstance();
+  // 서버로부터 상세정보를 조회해 오는 함수
+  const fetchDetail = async () => {
+    const res = await myAxios.get(`/todolist/${_id}`);
+    setData(res.data);
+  };
+
+  // 최초에 데이터 받아올 때만 호출
+  useEffect(() => {
+    fetchDetail();
+  }, []);
 
   return (
     <div id='main'>
@@ -44,7 +58,7 @@ function TodoDetail() {
             <Link to='./todoedit'>수정</Link>
             <Link to='/list'>목록</Link>
           </div>
-          <Outlet context={{ item: data.item }} />
+          <Outlet context={{ item: data.item, refetch: fetchDetail }} />
         </>
       )}
     </div>
