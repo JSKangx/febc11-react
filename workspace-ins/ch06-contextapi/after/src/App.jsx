@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import Left1 from '@components/Left1';
 import Right1 from '@components/Right1';
 import { CounterProvider } from '@context/CounterContext';
+import { SimpleContext } from '@context/SimpleContext';
 
 function App() {
 
@@ -17,7 +18,9 @@ function App() {
         <div id="grid">
           <CounterProvider>
             <Left1 />
-            <Right1 />
+            <SimpleContext.Provider value={{ hello: 'world' }}>
+              <Right1 />
+            </SimpleContext.Provider>
           </CounterProvider>
         </div>
       </div>

@@ -11,10 +11,8 @@ CounterProvider.propTypes = {
 // 3. Provider 컴포넌트를 작성해서 export
 export function CounterProvider({ children }) {
   // 4. 데이터, 상태, 상태를 관리하는 함수 정의
-  // Left3에 전달
   const [count, setCount] = useState(10);
 
-  // Right3에 전달
   const countDown = function(step){
     setCount(count - step);
   };
@@ -28,6 +26,7 @@ export function CounterProvider({ children }) {
   const values = {
     state: { count },
     actions: { countDown, reset, countUp },
+    hello: 'counter'
   };
 
   // 5. Context 객체의 Provider로 자식 컴포넌트를 감싸서 리턴
