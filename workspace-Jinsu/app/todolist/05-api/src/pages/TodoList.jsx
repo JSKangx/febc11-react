@@ -6,20 +6,6 @@ import { Link, useSearchParams } from 'react-router-dom';
 import '../Pagination.css';
 import Pagination from '@components/Pagination';
 
-// const DUMMY_DATA = {
-//   items: [
-//     {
-//       _id: 1,
-//       title: '잠자기',
-//     },
-//     {
-//       _id: 2,
-//       title: '자바스크립트 복습',
-//       done: true,
-//     },
-//   ],
-// };
-
 function TodoList() {
   const [data, setData] = useState();
   const searchRef = useRef();
@@ -100,7 +86,7 @@ function TodoList() {
 
       {/* 조건부 렌더링 */}
       {data && (
-        <Pagination totalPages={data?.pagination.totalPages} currentPage={data?.pagination.page} />
+        <Pagination totalPages={data.pagination.totalPages} currentPage={data?.pagination.page} />
       )}
     </div>
   );
