@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import '../Pagination.css';
+import Pagination from '@components/Pagination';
 
 // const DUMMY_DATA = {
 //   items: [
@@ -28,7 +29,7 @@ function TodoList() {
   // 검색결과는 주소창에 params로 나타나야 공유할 때 쉽게 공유한다.
   const [searchParams, setSearchParams] = useSearchParams();
   const params = {
-    keyword: searchParams.get('keyword'), // 쿼리 스트링에서 keyword값 꺼내
+    keyword: searchParams.get('keyword') || '', // 쿼리 스트링에서 keyword값 꺼내
     page: searchParams.get('page') || 1, // 쿼리 스트링에서 page값 꺼내
     limit: 15,
   };
@@ -83,26 +84,6 @@ function TodoList() {
     searchRef.current.value = '';
   };
 
-  // 페이지네이션
-  let pageList = [];
-  const currentPage = data?.pagination.page;
-  // api 서버에 params로 page, limit를 사용하면 pagination객체를 얻을 수 있다.
-  // params에 아무것도 안 넣으면 pagination은 빈 객체
-  for (let page = 1; page <= data?.pagination.totalPages; page++) {
-    // 'keyword=환승&page=1'
-    // 'keyword=환승&page=2'
-    // 'keyword=환승&page=3'
-    searchParams.set('page', page);
-    // 위에서 설정한 searchParams를 문자열로 변환해서 search 변수에 할당
-    let search = searchParams.toString();
-
-    pageList.push(
-      <li key={page} className={currentPage === page ? 'active' : ''}>
-        <Link to={`/list?${search}`}>{page}</Link>
-      </li>
-    );
-  }
-
   return (
     <div id='main'>
       <h2>할일 목록</h2>
@@ -117,10 +98,10 @@ function TodoList() {
         <ul className='todolist'>{itemList}</ul>
       </div>
 
-      {/* pagination을 위한 목록 */}
-      <div className='pagination'>
-        <ul>{pageList}</ul>
-      </div>
+      {/* 조건부 렌더링 */}
+      {data && (
+        <Pagination totalPages={data?.pagination.totalPages} currentPage={data?.pagination.page} />
+      )}
     </div>
   );
 }
