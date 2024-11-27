@@ -1,27 +1,15 @@
 import useAxios from '@hooks/useAxios';
 import useAxiosInstance from '@hooks/useAxiosInstance';
 import { useEffect, useState } from 'react';
-import { Link, Outlet, useParams } from 'react-router-dom';
-
-// const DUMMY_DATA = {
-//   item: {
-//     _id: 5,
-//     title: 'Javascript 공부',
-//     content: '열심히 하자',
-//     done: false,
-//     createdAt: '2024.11.21 16:49:00',
-//     updatedAt: '2024.11.21 16:49:00',
-//   },
-// };
+import { Link, Outlet, useNavigate, useParams } from 'react-router-dom';
 
 function TodoDetail() {
   // URL의 파라미터를 추출할 때 사용
   // 라우터에 'list/:_id'로 등록된 컴포넌트가 호출되는 경우,
   // URL이 list/3이면, useParams는 { _id: 3 }을 반환.
   const { _id } = useParams();
-  console.log(_id);
-
   const [data, setData] = useState();
+  const navigate = useNavigate();
 
   // useEffect(() => {
   //   // API 서버 통신 전 임시로 데이터 출력
@@ -56,7 +44,9 @@ function TodoDetail() {
             <div>작성일 : {data.item.createdAt}</div>
             <div>수정일 : {data.item.updatedAt}</div>
             <Link to='./todoedit'>수정</Link>
-            <Link to='/list'>목록</Link>
+            <button type='button' onClick={() => navigate(-1)}>
+              목록
+            </button>
           </div>
           <Outlet context={{ item: data.item, refetch: fetchDetail }} />
         </>

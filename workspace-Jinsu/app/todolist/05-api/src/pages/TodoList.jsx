@@ -1,8 +1,9 @@
 import useAxiosInstance from '@hooks/useAxiosInstance';
-import useFetch from '@hooks/useFetch';
 import TodoListItem from '@pages/TodoListItem';
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+
+import '../Pagination.css';
 
 // const DUMMY_DATA = {
 //   items: [
@@ -20,6 +21,17 @@ import { Link } from 'react-router-dom';
 
 function TodoList() {
   const [data, setData] = useState();
+  const searchRef = useRef();
+
+  // 주소창 쿼리 스트링 정보를 읽거나 설정할 때 사용하는 훅
+  // 예) /list?keyword=환승&page=3 : 이 훅은 new URLSearchParams('keyword=환승&page=3')으로 반환해줌.
+  // 검색결과는 주소창에 params로 나타나야 공유할 때 쉽게 공유한다.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const params = {
+    keyword: searchParams.get('keyword'), // 쿼리 스트링에서 keyword값 꺼내
+    page: searchParams.get('page') || 1, // 쿼리 스트링에서 page값 꺼내
+    limit: 15,
+  };
 
   // API 서버에서 목록조회 (리액트 훅은 이벤트 리스너 안에서 사용 불가하기에, 삭제 이벤트 리스너 안에서는 일반 액시오스 객체 사용)
   // const { data } = useFetch({ url: '/todolist' });
@@ -46,21 +58,50 @@ function TodoList() {
   // 서버로부터 리스트를 조회해오는 함수 정의
   // (1) 최초 마운트 이후 (2) 데이터를 삭제할 때 호출됨
   async function fetchList() {
-    const res = await myAxios.get('/todolist');
+    // { params : params } 를 축약하여 { params }
+    const res = await myAxios.get('/todolist', { params });
     // 리스트를 받아와서 data 상태를 업데이트한다.
     console.log(res.data);
     setData(res.data);
   }
 
-  // 최초 컴포넌트 마운트 이후에 fetchList 함수 호출
+  // 최초 마운트 이후에 fetchList 함수 호출
   useEffect(() => {
     fetchList();
-  }, []);
+  }, [searchParams]);
 
   // 처음에 마운트될 때는 data === null이기 때문에 마운트된 이후에 useEffect가 호출되면 data가 DUMMY_DATA로 채워진다.
   const itemList = data?.items.map((item) => (
     <TodoListItem key={item._id} item={item} handleDelete={handleDelete} />
   ));
+
+  // 검색 기능 (실시간으로 목록이 렌더링되는 건 불필요한 렌더링이라 useRef 사용)
+  const handleSearch = (e) => {
+    e.preventDefault();
+    // 새로운 searchParams 만들고 searchParams에 할당
+    setSearchParams(new URLSearchParams(`keyword=${searchRef.current.value}`));
+    searchRef.current.value = '';
+  };
+
+  // 페이지네이션
+  let pageList = [];
+  const currentPage = data?.pagination.page;
+  // api 서버에 params로 page, limit를 사용하면 pagination객체를 얻을 수 있다.
+  // params에 아무것도 안 넣으면 pagination은 빈 객체
+  for (let page = 1; page <= data?.pagination.totalPages; page++) {
+    // 'keyword=환승&page=1'
+    // 'keyword=환승&page=2'
+    // 'keyword=환승&page=3'
+    searchParams.set('page', page);
+    // 위에서 설정한 searchParams를 문자열로 변환해서 search 변수에 할당
+    let search = searchParams.toString();
+
+    pageList.push(
+      <li key={page} className={currentPage === page ? 'active' : ''}>
+        <Link to={`/list?${search}`}>{page}</Link>
+      </li>
+    );
+  }
 
   return (
     <div id='main'>
@@ -68,11 +109,17 @@ function TodoList() {
       <div className='todo'>
         <Link to='/list/add'>추가</Link>
         <br />
-        <form className='search'>
-          <input type='text' autoFocus />
+        <form onSubmit={handleSearch} className='search'>
+          <input type='text' autoFocus defaultValue={params.keyword} ref={searchRef} />
           <button type='submit'>검색</button>
         </form>
+        <p>검색 결과 : 총 {data?.pagination.total}개</p>
         <ul className='todolist'>{itemList}</ul>
+      </div>
+
+      {/* pagination을 위한 목록 */}
+      <div className='pagination'>
+        <ul>{pageList}</ul>
       </div>
     </div>
   );
