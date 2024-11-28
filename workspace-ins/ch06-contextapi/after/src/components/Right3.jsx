@@ -9,6 +9,7 @@ function Right3() {
 
   const simple = useContext(SimpleContext);
 
+  // CounterContext 구독함(CounterContext의 상태변경이 리렌더링을 유발함)
   const { actions: { countDown, reset, countUp } } = useContext(CounterContext);
 
   return (
