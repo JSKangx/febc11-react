@@ -1,7 +1,7 @@
 import { COUNTER_ACTION } from '@redux/counterActionCreator';
 
 // 초기 state값. 최초에는 state가 넘어오지 않을 것이기 때문에 기본값 설정 필요.
-const initialState = { count: 0 };
+const initialState = { count: 5 };
 
 // state: 이전 상태(store가 내부적으로 관리, 이전의 리턴값이 다음의 state로 전달)
 // 그런데 상태가 복합객체일 경우 상태 직접 접근해서 수정하면 불변성 유지가 안 된다.
