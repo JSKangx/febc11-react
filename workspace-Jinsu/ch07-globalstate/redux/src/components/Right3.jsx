@@ -1,6 +1,6 @@
-import counterActionCreator from '@redux/counterActionCreator';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { countDown, countReset, countUp } from '@redux-toolkit/counterSlice';
 
 function Right3() {
   useEffect(() => {
@@ -14,9 +14,9 @@ function Right3() {
   return (
     <div>
       <h3>Right3</h3>
-      <button onClick={() => dispatch(counterActionCreator.countDown(1))}>-1</button>
-      <button onClick={() => dispatch(counterActionCreator.countReset())}>0</button>
-      <button onClick={() => dispatch(counterActionCreator.countUp(1))}>+1</button>
+      <button onClick={() => dispatch(countDown(1))}>-1</button>
+      <button onClick={() => dispatch(countReset())}>0</button>
+      <button onClick={() => dispatch(countUp(1))}>+1</button>
     </div>
   );
 }
