@@ -1,13 +1,16 @@
 import { create } from 'zustand';
 
-const useCounterState = create((set, get) => ({
+const useCounterStore = create((set, get) => ({
   count: 8,
   countUp: (step) => {
-    const newState = { count: get().count + step };
-    set(newState);
+    set({ count: get().count + step });
   },
-  countReset: () => {},
-  countDown: (step) => {},
+  countReset: () => {
+    set({ count: 0 });
+  },
+  countDown: (step) => {
+    set({ count: get().count - step });
+  },
 }));
 
-export default useCounterState;
+export default useCounterStore;
