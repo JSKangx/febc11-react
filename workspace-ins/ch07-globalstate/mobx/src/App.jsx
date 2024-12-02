@@ -10,7 +10,7 @@ function App() {
 
   return (
     <>
-      <h1>전역 상태 관리 - Zustand</h1>
+      <h1>전역 상태 관리 - MobX</h1>
       <div id="container">
         <h1>App</h1>
         <div id="grid">
