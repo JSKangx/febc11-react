@@ -20,3 +20,11 @@ const result2 = sayHello(
   '하루'
 );
 console.log(result2);
+
+const userName = '무지';
+const weather = '맑음';
+const str = `안녕하세요 ${userName}님. 오늘 날씨는 ${weather}입니다.`;
+
+// 태그드 템플릿 : ${}를 기준으로 배열로 나눠진다.
+const result3 = sayHello`안녕하세요 ${userName}님. 오늘 날씨는 ${weather}입니다.`;
+console.log(result3); // 안녕하세요 <strong>무지</strong>님. 오늘 날씨는 <strong>맑음</strong>입니다.
