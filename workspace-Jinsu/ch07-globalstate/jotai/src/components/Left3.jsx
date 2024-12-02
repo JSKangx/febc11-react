@@ -1,5 +1,5 @@
+import { countAtom } from '@jotai/countAtom';
 import { useAtom } from 'jotai';
-import { countAtom } from '../jotai/countAtom';
 import { useEffect } from 'react';
 
 function Left3() {

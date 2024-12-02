@@ -11,7 +11,7 @@
       "@recoil/*": ["recoil/*"],
       "@zustand/*": ["zustand/*"],
       "@redux-toolkit/*": ["redux-toolkit/*"],
-      "@jotai/*": ["jotai/*"]
+      "@mobx/*": ["mobx/*"]
     }
   }
 }
