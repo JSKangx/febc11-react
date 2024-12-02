@@ -1,9 +1,13 @@
 import PropTypes from 'prop-types';
-import './Button.css';
+import styles from './Button.module.css';
+import classNames from 'classnames';
 
 const Button = ({ type = 'button', onClick, children, color, bg }) => {
+  // 클래스 이름 만들기 복잡해서 classnames 라이브러리 사용
+  const colorStyle = classNames(styles.button, styles[`color-${bg}-${color}`]);
+
   return (
-    <button type={type} onClick={onClick} className={`button color-${bg}-${color}`}>
+    <button type={type} onClick={onClick} className={colorStyle}>
       {children}
     </button>
   );

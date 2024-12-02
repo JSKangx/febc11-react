@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "classnames": "^2.5.1",
     "jotai": "^2.10.3"
   }
 }
