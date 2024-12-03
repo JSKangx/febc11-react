@@ -1,28 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Product from './Product';
 import Shipping from './Shipping';
 import { SyncLoader } from 'react-spinners';
-import axios from 'axios';
+import useAxiosInstance from '@hooks/useAxiosInstance';
 
 function App() {
-  console.log('App 렌더링');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // 상태 관리
   const [data, setData] = useState();
 
+  // custom axios instance 사용
+  const axios = useAxiosInstance();
+
   // data 가져오는 함수
   const fetchData = async (_targetId) => {
     setIsLoading(true);
-
     try {
       // fetch(url, option)
-      const res = await axios.get(`https://11.fesp.shop/products/${_targetId}?delay=2000`, {
-        headers: {
-          'client-id': '00-nike',
-        },
-      });
+      const res = await axios.get(`/products/${_targetId}`);
 
       // 응답 상태코드가 200, 300번대일 경우
       setData(res.data.item);
