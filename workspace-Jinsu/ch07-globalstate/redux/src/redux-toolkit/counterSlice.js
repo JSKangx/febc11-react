@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// slice를 이용하면 reducer와 action creator를 간단하게 작성 가능
+// createSlice를 이용하면 reducer와 action creator를 간단하게 작성 가능
 // 반환값 { reducer, actions, ... }
 // reducer : reducers에 등록해 놓은 함수. Redux 스토어에 전달해야 함.
 // actions : 각 리듀서에 해당하는 action 생성자 객체
