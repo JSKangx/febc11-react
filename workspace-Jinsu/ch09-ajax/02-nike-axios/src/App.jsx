@@ -19,7 +19,7 @@ function App() {
     setIsLoading(true);
     try {
       // fetch(url, option)
-      const res = await axios.get(`/products/${_targetId}`);
+      const res = await axios.get(`/produwaefcts/${_targetId}`);
 
       // 응답 상태코드가 200, 300번대일 경우
       setData(res.data.item);

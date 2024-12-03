@@ -5,6 +5,7 @@ import styled from 'styled-components';
 // 어떤 스타일을 적용할지는 tagged template 문법으로 넘겨주면 된다.
 // 이렇게 넘겨주면 아래 스타일이 적용된 button 태그가 생성된다.
 const BasicButtonStyle = styled.button`
+  // 이 컴포넌트에 전해지는 props 값에 접근 가능
   background-color: ${(props) => props.bg || '#4caf50'}; /* Green background */
   border: none; /* Remove borders */
   color: ${(props) => props.color || 'white'}; /* White text */
