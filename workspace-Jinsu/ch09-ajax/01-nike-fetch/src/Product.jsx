@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { memo } from 'react';
 
+// Product도 메모이제이션을 해서, App 이 렌더링될 때에도 렌더링되지 않도록 했다.
+// App에서 전달해준 product props를 구조 분해 할당을 사용해 안의 속성을 바로 꺼내왔다.
 const Product = memo(function Product({ product: { name, price, mainImages, content } }) {
   console.log('Product 렌더링');
   return (

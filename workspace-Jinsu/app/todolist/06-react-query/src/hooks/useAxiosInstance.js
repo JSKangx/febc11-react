@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import { toast, Slide } from 'react-toastify';
 
 function useAxiosInstance() {
   // 기본 설정을 가진 새로운 인스턴스를 생성할 때 사용하는 메서드.
@@ -38,7 +38,19 @@ function useAxiosInstance() {
     (error) => {
       // 2xx 외의 범위에 있는 상태 코드는 이 함수가 호출됨
       // 공통 에러 처리
-      console.error('인터셉터', error);
+      console.error(error);
+
+      toast.error('에러가 발생했습니다. 잠시 후 다시 시도해주세요.', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+        transition: Slide,
+      });
 
       // 여기서 전달한 error 객체는 catch 블럭의 err 인수로 전달된다.
       return Promise.reject(error);

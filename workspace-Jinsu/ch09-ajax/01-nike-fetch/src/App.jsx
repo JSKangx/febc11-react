@@ -47,9 +47,7 @@ function App() {
 
   // mock data
   const basicShippingFees = 3000;
-
   const [qty, setQty] = useState(1);
-
   const [shippingFees, setShippingFees] = useState(basicShippingFees);
 
   const handleQtyChange = (e) => {
@@ -60,7 +58,7 @@ function App() {
   };
 
   // useCallback 함수 안에 또 콜백 함수가 있기에, useCallback 함수가 생성될 당시의 'shippingFees'를 콜백함수가 기억(클로저)한다. deps를 빈배열로 두면 배송비가 바뀌어도 여전히 생성될 당시의 배송비가 저장됨.
-  // 그래서 deps에 배송비를 넣어줘서 캐시된 걸 버리고 새로운 함수가 만들어지도록 해줘야 함.
+  // 그래서 deps에 배송비를 넣어줘서 배송비가 바뀔 때마다 캐시된 걸 버리고 새로운 useCallback 함수가 만들어지도록 해줘야 함.
   const handlePayment = useCallback(() => {
     alert(`배송비 ${shippingFees}원이 추가됩니다. 상품을 결제하시겠습니까?`);
   }, [shippingFees]);

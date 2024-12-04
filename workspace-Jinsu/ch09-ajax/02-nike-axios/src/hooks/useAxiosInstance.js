@@ -21,9 +21,9 @@ function useAxiosInstance() {
     console.log(config);
     config.params = {
       // 호출할 때 delay를 명시적으로 지정 안 했으면 아래가 지정됨.
-      // 개발할 때는 2000으로, 운영할 때는 0으로 환경변수로 지정해주면 된다.
+      // 개발할 때는 2000으로, 운영할 때는 0으로 환경변수로 지정해주면 손쉽게 상황에 따른 설정이 가능하다.
       delay: 2000,
-      ...config.params, // 기존값 그대로
+      ...config.params, // 나머지 기존값은 그대로 유지
     };
 
     return config;
@@ -55,7 +55,7 @@ function useAxiosInstance() {
       // toast를 사용하는 방법
       toast(message);
 
-      // 여기서 전달한 error 객체는 catch 블럭의 err 인수로 전달된다.
+      // 여기서 전달한 error 객체는 catch 블럭의 인수로 전달된다.
       return Promise.reject(error);
     }
   );

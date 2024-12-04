@@ -1,14 +1,15 @@
 import useAxiosInstance from '@hooks/useAxiosInstance';
 import TodoListItem from '@pages/TodoListItem';
-import { useEffect, useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link, useSearchParams } from 'react-router-dom';
+import { toast, ToastContainer, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import '../Pagination.css';
 import Pagination from '@components/Pagination';
 
 function TodoList() {
-  // const [data, setData] = useState();
   const searchRef = useRef();
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -29,6 +30,7 @@ function TodoList() {
     select: (res) => res.data,
     staleTime: 1000 * 60, // 1분 동안 캐시유지.
     gcTime: 1000 * 60 * 5, // 5분 뒤 캐시 제거 (기본이 5분)
+    retry: 1,
   });
 
   // 삭제 작업
@@ -39,8 +41,7 @@ function TodoList() {
       // 목록 다시 조회
       refetch();
     },
-    onError: (err) => {
-      console.error(err);
+    onError: () => {
       alert('할일 삭제에 실패했습니다.');
     },
   });
@@ -58,6 +59,19 @@ function TodoList() {
 
   return (
     <div id='main'>
+      <ToastContainer
+        position='top-center'
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='light'
+        transition={Slide}
+      />
       <h2>할일 목록</h2>
       <div className='todo'>
         <Link to='/list/add'>추가</Link>

@@ -9,18 +9,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 function App() {
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
-  // const [data, setData] = useState();
-
   // custom axios instance 사용
   const axios = useAxiosInstance();
 
   // useQuery는 조회작업 할 때 사용하는 훅.
   // useQuery는 data, isLoading, error를 상태관리하고 리턴해준다.
-  // refetch는 다시 get 요청을 보낼 때 사용하는 함수
+  // refetch는 다시 get 요청을 보낼 때 사용하는 함수. 이 외에도 여러가지 함수를 반환해줌.
   const { data, isLoading, error, refetch } = useQuery({
-    queryKey: ['products', 7], // 캐시에 사용할 키값을 지정 (7번 상품)
+    // 리액트 쿼리는 qeuryKey를 가진 쿼리 결과를 캐싱해서, 동일한 데이터를 다시 요청하지 않고 캐시된 데이터를 반환한다.
+    queryKey: ['products', 7],
     // 서버에 ajax 요청을 보내 실제 데이터를 받아올 코드 작성. axios, fetch, xhr 뭘 쓰든 Promise만 반환하면 된다(axios, fetch의 경우 await 없이 호출하면 Promise가 반환됨)
     queryFn: () => axios.get(`/products/7`), // url을 안 쓴 건, 이건 axios instance이기에
     // 응답(data) 중에서 하나만 선택해서 사용할 때 사용함. 여기서 세팅한 값이 data로 저장됨. (axios instance interceptor 같은 친구)

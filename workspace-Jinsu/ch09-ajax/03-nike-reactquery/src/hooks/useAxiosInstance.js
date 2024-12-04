@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { NIKE_ACCESS_TOKEN } from '../tokens';
 
 function useAxiosInstance() {
   // 기본 설정을 가진 새로운 인스턴스를 생성할 때 사용하는 메서드.
@@ -17,9 +18,8 @@ function useAxiosInstance() {
   // 요청 인터셉터 추가하기
   // 전달되는 config는 서버 요청할 때 보내는 axios 설정값 (instance + 호출할 때 설정한 것)
   instance.interceptors.request.use((config) => {
-    config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjQsInR5cGUiOiJ1c2VyIiwibmFtZSI6IuygnOydtOyKqCIsImVtYWlsIjoidTFAZ21haWwuY29tIiwiaW1hZ2UiOiIvZmlsZXMvMDAtbmlrZS91c2VyLWpheWcud2VicCIsImxvZ2luVHlwZSI6ImVtYWlsIiwiaWF0IjoxNzMzMjc5MjUzLCJleHAiOjE3MzMzNjU2NTMsImlzcyI6IkZFU1AifQ.lvU0XamBGYN3rr5z39GENUdnyYLj2Ps-TrMPUycNZig`;
+    config.headers.Authorization = `Bearer ${NIKE_ACCESS_TOKEN}`;
     // 요청이 전달되기 전에 필요한 공통 작업 수행
-    console.log(config);
     config.params = {
       // 호출할 때 delay를 명시적으로 지정 안 했으면 아래가 지정됨.
       // 개발할 때는 2000으로, 운영할 때는 0으로 환경변수로 지정해주면 된다.
