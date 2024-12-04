@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function useAxiosInstance() {
   // 기본 설정을 가진 새로운 인스턴스를 생성할 때 사용하는 메서드.
@@ -35,7 +36,8 @@ function useAxiosInstance() {
       // 응답 데이터를 이용해서 필요한 공통 작업 수행
       // 이 코드만 작성해놔도 호출하는 컴포넌트에서 이걸 안 찍어도 된다.
       if (response.data?.ok !== undefined) {
-        // Truthy, Falsy 값을 실제로 bool 값으로 바꿀 때 !! 쓴다.
+        // Truthy(1), Falsy(0) 값을 실제로 bool 값으로 바꿀 때 !! 쓴다.
+        // 나는 ok값을 1, 0이 아닌 true, false로 쓰고 싶다!
         response.data.ok = !!response.data.ok;
       }
       console.log('인터셉터', response);
@@ -46,6 +48,14 @@ function useAxiosInstance() {
       // 2xx 외의 범위에 있는 상태 코드는 이 함수가 호출됨
       // 공통 에러 처리
       console.error('인터셉터', error);
+      // 화면에 출력하는 방법
+      const message = '잠시 후 다시 요청하세요.';
+      // error.message = message;
+
+      // toast를 사용하는 방법
+      toast(message);
+
+      // 여기서 전달한 error 객체는 catch 블럭의 err 인수로 전달된다.
       return Promise.reject(error);
     }
   );

@@ -1,8 +1,11 @@
-import { useCallback, useEffect, useState } from 'react';
 import Product from './Product';
 import Shipping from './Shipping';
-import { SyncLoader } from 'react-spinners';
+import { useCallback, useEffect, useState } from 'react';
 import useAxiosInstance from '@hooks/useAxiosInstance';
+import { SyncLoader } from 'react-spinners';
+// toast 메시지를 보여줄 영역만 지정함. toast는 useAxiosInstance에서 사용할 예정
+import { Flip, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   const [isLoading, setIsLoading] = useState(false);
@@ -13,21 +16,25 @@ function App() {
 
   // custom axios instance 사용
   const axios = useAxiosInstance();
+  console.log(axios);
 
   // data 가져오는 함수
   const fetchData = async (_targetId) => {
     setIsLoading(true);
+    // 이전에 데이터나 에러가 떴다면, 화면을 아예 지우고 다시 서버 통신
+    setData(null);
+    setError(null);
+
     try {
       // fetch(url, option)
-      const res = await axios.get(`/produwaefcts/${_targetId}`);
+      const res = await axios.get(`/producddts/${_targetId}`);
 
       // 응답 상태코드가 200, 300번대일 경우
       setData(res.data.item);
       setError(null);
     } catch (err) {
-      console.error(err);
-      setError({ message: '잠시 후 다시 요청하세요.' });
-      setError(null);
+      setError(err);
+      setData(null);
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +69,7 @@ function App() {
     <>
       <h1>02 Nike 상품 상세 조회 - Axios</h1>
       {isLoading && <SyncLoader color='#6cda7f' />}
-      {error && <p>{error.message}</p>}
+      {/*{error && <p>{error.message}</p>}*/}
       {data && (
         <div>
           <Product product={data} />
@@ -84,6 +91,19 @@ function App() {
           <Shipping handlePayment={handlePayment} fees={shippingFees} />
         </div>
       )}
+      <ToastContainer
+        position='top-center'
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme='dark'
+        transition={Flip}
+      />
     </>
   );
 }
