@@ -1,0 +1,20 @@
+a {
+  margin: 0 10px 0 5px;
+  /* padding: 5px; */
+  text-decoration: none;
+  color: unset;
+}
+
+.menu {
+  background-color: white;
+}
+
+.menu-dark {
+  background-color: gray;
+}
+
+.input-error {
+  font-size: 12px;
+  color: red;
+  font-weight: bold;
+}
