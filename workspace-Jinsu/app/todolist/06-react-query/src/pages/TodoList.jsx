@@ -1,7 +1,7 @@
 import useAxiosInstance from '@hooks/useAxiosInstance';
 import TodoListItem from '@pages/TodoListItem';
 import { useEffect, useRef, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { Link, useSearchParams } from 'react-router-dom';
 
 import '../Pagination.css';
@@ -31,26 +31,22 @@ function TodoList() {
     gcTime: 1000 * 60 * 5, // 5분 뒤 캐시 제거 (기본이 5분)
   });
 
-  console.log(data);
-
   // 삭제 작업
-  const handleDelete = async (_targetId) => {
-    // 서버에 변경을 발생시키는 것이기 때문에 사용자에게 결과를 정확히 고지해줘야 한다.
-    try {
-      // API 서버에 삭제 요청
-      const res = await axios.delete(`/todolist/${_targetId}`);
-      console.log(res);
+  const deleteItem = useMutation({
+    mutationFn: (_targetId) => axios.delete(`/todolist/${_targetId}`),
+    onSuccess: () => {
       alert('할일이 삭제되었습니다.');
-      // API 서버에서 변경된 목록을 다시 조회해 오기
+      // 목록 다시 조회
       refetch();
-    } catch (err) {
+    },
+    onError: (err) => {
       console.error(err);
       alert('할일 삭제에 실패했습니다.');
-    }
-  };
+    },
+  });
 
   const itemList = data?.items.map((item) => (
-    <TodoListItem key={item._id} item={item} handleDelete={handleDelete} />
+    <TodoListItem key={item._id} item={item} handleDelete={() => deleteItem.mutate(item._id)} />
   ));
 
   const handleSearch = (e) => {

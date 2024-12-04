@@ -44,7 +44,7 @@ function TodoDetail() {
             <div>작성일 : {data.item.createdAt}</div>
             <div>수정일 : {data.item.updatedAt}</div>
             <Link to='./todoedit'>수정</Link>
-            <button type='button' onClick={() => navigate(-1)}>
+            <button type='button' onClick={() => navigate('/list')}>
               목록
             </button>
           </div>
