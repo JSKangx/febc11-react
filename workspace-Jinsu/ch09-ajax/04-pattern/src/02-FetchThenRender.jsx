@@ -44,7 +44,7 @@ function FetchThenRender() {
   return (
     <>
       <h4>{post.item.title}</h4>
-      {/* 자식은 자신이 필요한 데이터를 직접 가져오는 게 아니고, 부모가 가져온 데이터를 props로 전달받는다. */}
+      {/* 자식은 자신이 필요한 데이터를 직접 가져오는 게 아니고, 부모가 가져온 데이터를 props로 전달받는다. 부모에게 의존하게 되기에 다른 데서 사용 못한다.*/}
       <Replies replies={replies} />
     </>
   );
