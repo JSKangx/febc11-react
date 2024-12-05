@@ -14,7 +14,8 @@ function App() {
 
   // useQuery는 조회작업 할 때 사용하는 훅.
   // useQuery는 data, isLoading, error를 상태관리하고 리턴해준다.
-  // refetch는 다시 get 요청을 보낼 때 사용하는 함수. 이 외에도 여러가지 함수를 반환해줌.
+  // refetch는 다시 get 요청을 보낼 때 사용하는 함수.
+  // 이 외에도 여러가지 함수를 반환해줌.
   const { data, isLoading, error, refetch } = useQuery({
     // 리액트 쿼리는 qeuryKey를 가진 쿼리 결과를 캐싱해서, 동일한 데이터를 다시 요청하지 않고 캐시된 데이터를 반환한다.
     queryKey: ['products', 7],
@@ -29,8 +30,8 @@ function App() {
   // 상품 구매
   const orderProduct = useMutation({
     // 구매할 때는 캐시는 따로 필요 없어서 쿼리 키 불필요.
-    // useMutation() 이 반환한 객체(orderProduct)의 mutate() 호출하면, 아래 함수가 호출됨.
     // useMutation을 이벤트 핸들러 안에 넣으면 좋지만, 훅이기 때문에 못 넣는다.
+    // 그대신 useMutation() 이 반환한 객체(orderProduct)는 이벤트 핸들러 안에 넣을 수 있는데, orderProduct.mutate()를 호출하면, mutationFn이 호출됨.
     mutationFn: (products) => axios.post(`/orders`, products),
     // 주문이 성공적으로 완료된 후 실행할 코드
     onSuccess: () => {

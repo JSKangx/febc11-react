@@ -13,7 +13,8 @@ function fetchData() {
 // 부모 컴포넌트에 import 될 때(렌더링 전) 이 함수는 호출된다.
 const promise = fetchData();
 
-// 게시글 1건 조회 API 호출 함수
+// 데이터 가져오는 함수
+// (1) 게시글 1건 조회 API 호출 함수
 function fetchPost() {
   return axios.get(`https://11.fesp.shop/posts/1?delay=3000`, {
     headers: {
@@ -22,10 +23,21 @@ function fetchPost() {
   });
 }
 
-// 게시글 상세 조회 페이지
+// (2) 댓글 목록 조회 API 호출
+function fetchReplies() {
+  return axios.get(`https://11.fesp.shop/posts/1/replies?delay=2000`, {
+    headers: {
+      'client-id': '00-brunch',
+    },
+  });
+}
+
+// 컴포넌트
+// (1) 게시글 상세 조회 페이지
 function FetchThenRender() {
   // 데이터를 저장할 상태
   const [post, setPost] = useState();
+  // 부모 컴포넌트에서 자식 컴포넌트의 데이터까지 받아서 상태관리함.
   const [replies, setReplies] = useState();
 
   useEffect(() => {
@@ -50,16 +62,7 @@ function FetchThenRender() {
   );
 }
 
-// 댓글 목록 조회 API 호출
-function fetchReplies() {
-  return axios.get(`https://11.fesp.shop/posts/1/replies?delay=2000`, {
-    headers: {
-      'client-id': '00-brunch',
-    },
-  });
-}
-
-// 댓글 목록 페이지
+// (2) 댓글 목록 페이지 (FetchThenRender 컴포넌트에 삽입됨)
 function Replies({ replies }) {
   if (!replies) {
     return <div>댓글 로딩중...</div>;
