@@ -4,7 +4,7 @@ import router from '@/routes';
 function App() {
   return (
     <>
-      <RouterProvider router={router} future={{ v7_startTransition: true }} />
+      <RouterProvider router={router} />
     </>
   );
 }

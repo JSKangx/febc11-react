@@ -1,35 +1,7 @@
 import ListItem from '@pages/board/ListItem';
-import { Link, useParams } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
-import useAxiosInstance from '@hooks/useAxiosInstance';
+import { Link } from 'react-router-dom';
 
 export default function List() {
-  const axios = useAxiosInstance();
-
-  // routes.jsx에서 /:type 이라고 해놨기 때문에
-  // localhost/info => { type: info }가 된다.
-  // 주소창에서 type 키에 설정된 값을 꺼내온다.
-  // localhost/free에 접속하면 type: free가 되기에 '/posts/free'로 서버 요청을 보낸다.
-  const { type } = useParams();
-  const { data } = useQuery({
-    queryKey: ['posts', type],
-    queryFn: () => axios.get('/posts', { params: { type: 'type' } }),
-    select: (res) => res.data,
-    staleTime: 1000 * 10,
-  });
-
-  if (!data) {
-    return (
-      <div className='mt-0 mx-auto text-center'>
-        로딩중... <br />
-        잠시만 기다려주세요
-      </div>
-    );
-  }
-  console.log(data.item);
-
-  const list = data.item.map((item) => <ListItem key={item._id} item={item}></ListItem>);
-
   return (
     <main className='min-w-80 p-10'>
       <div className='text-center py-4'>
@@ -73,7 +45,9 @@ export default function List() {
               <th className='p-2 whitespace-nowrap font-semibold hidden sm:table-cell'>작성일</th>
             </tr>
           </thead>
-          <tbody>{list}</tbody>
+          <tbody>
+            <ListItem />
+          </tbody>
         </table>
         <hr />
 
