@@ -25,7 +25,7 @@ export default function Header() {
               <Link to='/free'>자유게시판</Link>
             </li>
             <li className='hover:text-amber-500 a:font-semibold'>
-              <Link to='/qna'>질문게시판</Link>
+              <Link to='/brunch'>브런치스토리</Link>
             </li>
           </ul>
         </div>

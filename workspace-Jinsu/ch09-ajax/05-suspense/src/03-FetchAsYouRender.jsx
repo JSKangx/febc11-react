@@ -13,6 +13,7 @@ function fetchPost() {
 // 게시글 상세 조회 페이지
 function FetchAsYouRender() {
   // useSuspenseQuery의 queryFn은 promise를 throw한다. 그 아래 코드들은 더이상 실행이 안 되니까 data가 없을 때 에러가 안 난다(데이터 있는지 없는지 체크 로직 안 해도 된다).
+  // Suspense를 통해 데이터 준비가 완료되기 전까지는 UI를 "일시 중단"
   // -> catch 블록이 없으면 pending 상태 동안은 부모 컴포넌트(Suspense)의 fallback을 렌더링 함
   // -> promise가 fullfiled되면 자식 내용을 가지고 리렌더링함.
   const { data } = useSuspenseQuery({

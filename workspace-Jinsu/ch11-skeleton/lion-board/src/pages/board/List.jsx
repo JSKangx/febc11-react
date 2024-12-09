@@ -13,7 +13,7 @@ export default function List() {
   const { type } = useParams();
   const { data } = useQuery({
     queryKey: ['posts', type],
-    queryFn: () => axios.get('/posts', { params: { type: 'type' } }),
+    queryFn: () => axios.get('/posts', { params: { type } }),
     select: (res) => res.data,
     staleTime: 1000 * 10,
   });
