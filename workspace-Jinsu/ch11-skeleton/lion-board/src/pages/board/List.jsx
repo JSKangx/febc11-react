@@ -47,7 +47,8 @@ export default function List() {
         </form>
 
         <Link
-          to='/info/new'
+          // 현재 주소(게시판 종류) 뒤에 /new가 붙는 링크로 이동
+          to='new'
           className='bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
         >
           글작성
