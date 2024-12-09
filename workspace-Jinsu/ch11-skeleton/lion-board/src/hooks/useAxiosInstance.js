@@ -17,6 +17,9 @@ function useAxiosInstance() {
   // 요청 인터셉터 추가하기
   // 전달되는 config는 서버 요청할 때 보내는 axios 설정값 (instance + 호출할 때 설정한 것)
   instance.interceptors.request.use((config) => {
+    config.headers[
+      'Authorization'
+    ] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjM3LCJ0eXBlIjoidXNlciIsIm5hbWUiOiLrp6XslaTsuZjspogiLCJlbWFpbCI6ImFzZGZAZ21haWwuY29tIiwibG9naW5UeXBlIjoiZW1haWwiLCJpYXQiOjE3MzM3MjQ3MzQsImV4cCI6MTczMzgxMTEzNCwiaXNzIjoiRkVTUCJ9.jznGBFUl5uICnoYGF4jj3gAZ4nLRdpctZ3RWp5TgzDo`;
     // 요청이 전달되기 전에 필요한 공통 작업 수행
     config.params = {
       // 호출할 때 delay를 명시적으로 지정 안 했으면 아래가 지정됨.
