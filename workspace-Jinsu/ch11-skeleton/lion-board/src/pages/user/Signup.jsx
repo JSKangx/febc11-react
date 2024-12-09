@@ -10,7 +10,7 @@ export default function Signup() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }, // required 속성값에 지정된 것이 errors의 [name] : value로 지정됨.
     setError, // 수동으로 errors 객체를 지정하고 싶을 때
   } = useForm();
 
@@ -33,8 +33,10 @@ export default function Signup() {
     onError: (err) => {
       console.error(err);
       if (err.response?.data.errors) {
+        // 서버에서 에러메시지가 넘어왔다면 (4xx, 5xx)
         err.response?.data.errors.forEach((error) => setError(error.path, { message: error.msg }));
       } else {
+        // 서버에서 에러메시지가 안 넘어왔다면
         alert(err.response?.data.message || '잠시 후 다시 요청하세요.');
       }
     },
