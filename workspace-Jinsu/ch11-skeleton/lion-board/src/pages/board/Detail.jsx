@@ -1,7 +1,7 @@
 import useAxiosInstance from '@hooks/useAxiosInstance';
 import CommentList from '@pages/board/CommentList';
-import { useQuery } from '@tanstack/react-query';
-import { Link, useParams } from 'react-router-dom';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 
 export default function Detail() {
   const axios = useAxiosInstance();
@@ -18,6 +18,25 @@ export default function Detail() {
     staleTime: 1000 * 10,
   });
 
+  const queryClient = useQueryClient();
+
+  const navigate = useNavigate();
+
+  const removeItem = useMutation({
+    mutationFn: (_id) => axios.delete(`/posts/${_id}`),
+    onSuccess: () => {
+      alert('게시물이 삭제되었습니다.');
+      // 목록으로 돌아갔을 때 캐시된 데이터 말고(없애고) 최신 데이터 보여주기
+      queryClient.invalidateQueries({ queryKey: ['posts', type] });
+      navigate(`/${type}`);
+    },
+  });
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    removeItem.mutate(_id);
+  };
+
   if (!data) {
     return (
       <div className='mt-0 mx-auto text-center'>
@@ -30,7 +49,7 @@ export default function Detail() {
   return (
     <main className='container mx-auto mt-4 px-4'>
       <section className='mb-8 p-4'>
-        <form action='/info'>
+        <form onSubmit={onSubmit}>
           <div className='font-semibold text-xl'>제목 : {data.item.title}</div>
           <div className='text-right text-gray-400'>작성자 : {data.item.user.name}</div>
           <div className='mb-4'>
