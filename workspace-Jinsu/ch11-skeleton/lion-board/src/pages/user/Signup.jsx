@@ -35,9 +35,9 @@ export default function Signup() {
         // react-hook-form이 userInfo에 attach라는 이름의 객체를 넣었기에 삭제하자. 왜냐하면, 이 객체가 서버에 저장될 필요가 없고, 그냥 서버에 저장된 이미지의 경로만 유저 객체에 추가되면 되기 때문.
         delete userInfo.attach;
       }
-      userInfo.type = 'user';
 
-      console.log(userInfo);
+      // 유저의 타입은 하드코딩
+      userInfo.type = 'user';
 
       return axios.post(`/users`, userInfo);
     },

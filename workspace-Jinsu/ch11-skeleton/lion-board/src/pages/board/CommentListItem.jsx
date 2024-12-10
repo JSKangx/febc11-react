@@ -39,8 +39,6 @@ export default function CommentListItem({ item }) {
     removeItem.mutate(_id);
   };
 
-  console.log(item);
-
   return (
     <div className='shadow-md rounded-lg p-4 mb-4'>
       <div className='flex justify-between items-center mb-2'>

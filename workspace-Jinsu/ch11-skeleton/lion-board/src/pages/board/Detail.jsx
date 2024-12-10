@@ -2,14 +2,13 @@ import useAxiosInstance from '@hooks/useAxiosInstance';
 import CommentList from '@pages/board/CommentList';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
+import useUserStore from '../../zutand/userStore';
 
 export default function Detail() {
+  const { user } = useUserStore();
+
   const axios = useAxiosInstance();
 
-  // routes.jsx에서 /:type 이라고 해놨기 때문에
-  // localhost/info => { type: info }가 된다.
-  // 주소창에서 type 키에 설정된 값을 꺼내온다.
-  // localhost/free에 접속하면 type: free가 되기에 '/posts/free'로 서버 요청을 보낸다.
   const { type, _id } = useParams();
   const { data } = useQuery({
     queryKey: ['posts', _id],
@@ -65,18 +64,23 @@ export default function Detail() {
             >
               목록
             </Link>
-            <Link
-              to={`/${type}/${_id}/edit`}
-              className='bg-gray-900 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
-            >
-              수정
-            </Link>
-            <button
-              type='submit'
-              className='bg-red-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
-            >
-              삭제
-            </button>
+            {/* 로그인한 유저와 게시글 작성한 유저의 아이디가 같으면 수정, 삭제 버튼 출력 */}
+            {user?._id === data.item.user._id && (
+              <>
+                <Link
+                  to={`/${type}/${_id}/edit`}
+                  className='bg-gray-900 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
+                >
+                  수정
+                </Link>
+                <button
+                  type='submit'
+                  className='bg-red-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
+                >
+                  삭제
+                </button>
+              </>
+            )}
           </div>
         </form>
       </section>

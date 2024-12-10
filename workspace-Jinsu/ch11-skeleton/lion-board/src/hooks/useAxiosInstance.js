@@ -1,7 +1,9 @@
 import axios from 'axios';
 import { toast, Slide } from 'react-toastify';
+import useUserStore from '../zutand/userStore';
 
 function useAxiosInstance() {
+  const { user } = useUserStore();
   // 기본 설정을 가진 새로운 인스턴스를 생성할 때 사용하는 메서드.
   // 매 요청마다 공통된 설정을 적용할 수 있다.
   const instance = axios.create({
@@ -17,9 +19,10 @@ function useAxiosInstance() {
   // 요청 인터셉터 추가하기
   // 전달되는 config는 서버 요청할 때 보내는 axios 설정값 (instance + 호출할 때 설정한 것)
   instance.interceptors.request.use((config) => {
-    config.headers[
-      'Authorization'
-    ] = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOjEwNSwidHlwZSI6InVzZXIiLCJuYW1lIjoi6rCV7KeE7IiYIiwiZW1haWwiOiJya2R3bHN0bkBnbWFpbC5jb20iLCJpbWFnZSI6eyJvcmlnaW5hbG5hbWUiOiIxMTgyMDM2My5wbmciLCJuYW1lIjoiOXBvS1plR1pfLnBuZyIsInBhdGgiOiIvZmlsZXMvMDAtYnJ1bmNoLzlwb0taZUdaXy5wbmcifSwibG9naW5UeXBlIjoiZW1haWwiLCJpYXQiOjE3MzM4MDcyODIsImV4cCI6MTczMzg5MzY4MiwiaXNzIjoiRkVTUCJ9.1gBldwTtILb1zs-x1uk7sJeW-zRq9Q1SL2rwZVaC2ao`;
+    if (user) {
+      config.headers['Authorization'] = `Bearer ${user.accessToken}`;
+    }
+
     // 요청이 전달되기 전에 필요한 공통 작업 수행
     config.params = {
       // 호출할 때 delay를 명시적으로 지정 안 했으면 아래가 지정됨.

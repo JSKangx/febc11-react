@@ -3,9 +3,12 @@ import useAxiosInstance from '@hooks/useAxiosInstance';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import useUserStore from '../../zutand/userStore';
 
 export default function Login() {
   const navigate = useNavigate();
+  // 로그인 상태 관리 dispatch 함수
+  const setUser = useUserStore((store) => store.setUser);
 
   const {
     register,
@@ -19,7 +22,16 @@ export default function Login() {
   const login = useMutation({
     mutationFn: (formData) => axios.post(`/users/login`, formData),
     onSuccess: (res) => {
-      console.log(res);
+      // 회원정보 저장
+      const user = res.data.item;
+      setUser({
+        _id: user._id,
+        name: user.name,
+        profile: user.image?.path,
+        accessToken: user.token.accessToken,
+        refreshToken: user.token.refreshToken,
+      });
+
       alert(res.data.item.name + '님, 로그인 되었습니다.');
       navigate(`/`);
     },
