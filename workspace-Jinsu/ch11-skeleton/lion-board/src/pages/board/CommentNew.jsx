@@ -2,15 +2,14 @@ import InputError from '@components/InputError';
 import useAxiosInstance from '@hooks/useAxiosInstance';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 export default function CommentNew() {
-  const navigate = useNavigate();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
 
   const axios = useAxiosInstance();
@@ -19,14 +18,11 @@ export default function CommentNew() {
   const queryClient = useQueryClient();
 
   const addComment = useMutation({
-    mutationFn: (formData) => {
-      return axios.post(`/posts/${_id}/replies`, formData);
-    },
+    mutationFn: (formData) => axios.post(`/posts/${_id}/replies`, formData),
     onSuccess: () => {
-      alert('댓글이 등록되었습니다.');
-      // 댓글 캐시 내역 지우고 최신 댓글 보여주기
-      queryClient.invalidateQueries(['posts', _id, 'replies']);
-      navigate(`/posts/${_id}`);
+      reset(); // 입력 필드 초기화
+      // 게시글 전체 캐시를 비우고 다시 받아옴. navigate로 새로고침도 필요없음.
+      queryClient.invalidateQueries({ queryKey: ['posts', _id] });
     },
     onError: (err) => {
       console.error(err);
@@ -44,7 +40,7 @@ export default function CommentNew() {
             className='block p-2 w-full text-sm border rounded-lg border-gray-300 bg-gray-50 focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white'
             placeholder='내용을 입력하세요.'
             {...register('content', { required: '내용은 필수입니다.' })}
-          ></textarea>
+          />
 
           <InputError target={errors.content} />
         </div>

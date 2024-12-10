@@ -41,7 +41,7 @@ function TodoEdit() {
       alert('할 일이 수정되었습니다.');
       navigate(`/list/${item._id}`);
       // useQuery에서 설정한 키. todolist로 시작하는 키를 가진 캐시를 무효화.
-      queryClient.invalidateQueries(['todolist']);
+      queryClient.invalidateQueries({ queryKey: ['todolist'] });
     },
     onError: (err) => {
       alert('할 일 수정에 실패했습니다.');

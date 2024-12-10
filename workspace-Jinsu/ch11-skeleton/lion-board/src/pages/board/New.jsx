@@ -27,7 +27,7 @@ export default function New() {
     onSuccess: () => {
       alert('게시물이 등록되었습니다.');
       // 목록으로 돌아갔을 때 캐시된 데이터 말고(없애고) 최신 데이터 보여주기
-      queryClient.invalidateQueries(['posts', type]);
+      queryClient.invalidateQueries({ queryKey: ['posts', type] });
       navigate(`/${type}`);
     },
     onError: (err) => {

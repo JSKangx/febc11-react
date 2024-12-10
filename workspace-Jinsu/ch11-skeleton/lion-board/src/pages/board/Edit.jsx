@@ -36,7 +36,7 @@ export default function Edit() {
     onSuccess: () => {
       alert('게시물이 수정되었습니다.');
       // 상세보기 페이지 캐시된 데이터 말고(없애고) 최신 데이터 보여주기
-      queryClient.invalidateQueries(['posts', _id]);
+      queryClient.invalidateQueries({ queryKey: ['posts', _id] });
       navigate(`/${type}/${_id}`);
     },
     onError: (err) => {

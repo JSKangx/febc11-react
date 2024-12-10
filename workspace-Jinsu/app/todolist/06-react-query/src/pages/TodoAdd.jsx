@@ -30,7 +30,7 @@ function TodoAdd() {
       // refetch 호출하고 싶어도 TodoList에 있는 거라 호출 못한다. 그래서 아래 방법.
       // 지정한 키의 캐시를 무효화시킨다 == 다시 서버 통신한다.
       // useQuery에서 설정한 키. todolist로 시작하는 캐시는 무효화.
-      queryClient.invalidateQueries(['todolist']);
+      queryClient.invalidateQueries({ queryKey: ['todolist'] });
       navigate(`/list`);
       console.log(item);
     },

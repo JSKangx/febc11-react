@@ -18,8 +18,6 @@ export default function Detail() {
     staleTime: 1000 * 10,
   });
 
-  console.log(data);
-
   if (!data) {
     return (
       <div className='mt-0 mx-auto text-center'>
@@ -64,7 +62,7 @@ export default function Detail() {
         </form>
       </section>
 
-      <CommentList />
+      <CommentList data={data.item.replies} />
     </main>
   );
 }
