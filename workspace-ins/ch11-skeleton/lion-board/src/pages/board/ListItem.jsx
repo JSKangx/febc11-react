@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 ListItem.propTypes = {
   item: PropTypes.shape({
     _id: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     user: PropTypes.shape({
       name: PropTypes.string.isRequired,
     }),
