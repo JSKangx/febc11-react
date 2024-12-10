@@ -14,7 +14,7 @@ export default function Header() {
           <ul className="flex items-center gap-6 uppercase">
             <li className="hover:text-amber-500 hover:font-semibold"><Link to="/info">정보공유</Link></li>
             <li className="hover:text-amber-500 hover:font-semibold"><Link to="/free">자유게시판</Link></li>
-            <li className="hover:text-amber-500 a:font-semibold"><Link to="/qna">질문게시판</Link></li>
+            <li className="hover:text-amber-500 a:font-semibold"><Link to="/brunch">브런치스토리</Link></li>
           </ul>
         </div>
 

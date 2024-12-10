@@ -1,4 +1,7 @@
 export default function CommentNew() {
+
+  
+
   return (
     <div className="p-4 border border-gray-200 rounded-lg">
       <h4 className="mb-4">새로운 댓글을 추가하세요.</h4>
