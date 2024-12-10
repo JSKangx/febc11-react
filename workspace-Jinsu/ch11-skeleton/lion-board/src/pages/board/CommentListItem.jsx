@@ -35,8 +35,7 @@ export default function CommentListItem({ item }) {
     },
   });
 
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = () => {
     removeItem.mutate(_id);
   };
 
@@ -49,22 +48,20 @@ export default function CommentListItem({ item }) {
           alt={`${item.user.name}의 프로필 이미지`}
         />
         <Link to='' className='text-orange-400'>
-          {item.user.name}
+          {item.user.name ? item.user.name : '익명'}
         </Link>
         <time className='ml-auto text-gray-500' dateTime={`${item.updatedAt}`}>
           {item.updatedAt}
         </time>
       </div>
       <div className='flex justify-between items-center mb-2'>
-        <form onSubmit={onSubmit}>
-          <pre className='whitespace-pre-wrap text-sm'>{item.content}</pre>
-          <button
-            type='submit'
-            className='bg-red-500 py-1 px-2 text-sm text-white font-semibold ml-2 hover:bg-amber-400 rounded'
-          >
-            삭제
-          </button>
-        </form>
+        <pre className='whitespace-pre-wrap text-sm'>{item.content}</pre>
+        <button
+          onClick={onSubmit}
+          className='bg-red-500 py-1 px-2 text-sm text-white font-semibold ml-2 hover:bg-amber-400 rounded'
+        >
+          삭제
+        </button>
       </div>
     </div>
   );

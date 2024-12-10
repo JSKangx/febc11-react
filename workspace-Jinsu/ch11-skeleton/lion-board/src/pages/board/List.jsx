@@ -26,7 +26,6 @@ export default function List() {
       </div>
     );
   }
-  console.log(data.item);
 
   const list = data.item.map((item) => <ListItem key={item._id} item={item}></ListItem>);
 
