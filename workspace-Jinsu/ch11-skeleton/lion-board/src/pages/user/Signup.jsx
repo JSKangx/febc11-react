@@ -17,14 +17,29 @@ export default function Signup() {
   const axios = useAxiosInstance();
 
   const addUser = useMutation({
-    mutationFn: (formData) => {
-      const body = {
-        type: 'user', // 일단 회원의 타입은 하드 코딩
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      };
-      return axios.post(`/users`, body);
+    mutationFn: async (userInfo) => {
+      // 이미지는 선택사항이기 때문에 조건문 사용
+      if (userInfo.attach.length > 0) {
+        const imageFormData = new FormData();
+        imageFormData.append('attach', userInfo.attach[0]);
+        // 이미지 업로드는 파일 업로드 api를 사용
+        const fileRes = await axios('/files', {
+          method: 'post',
+          headers: {
+            // 파일 업로드시 필요한 설정
+            'Content-Type': 'multipart/form-data',
+          },
+          data: imageFormData,
+        });
+        userInfo.image = fileRes.data.item[0];
+        // react-hook-form이 userInfo에 attach라는 이름의 객체를 넣었기에 삭제하자. 왜냐하면, 이 객체가 서버에 저장될 필요가 없고, 그냥 서버에 저장된 이미지의 경로만 유저 객체에 추가되면 되기 때문.
+        delete userInfo.attach;
+      }
+      userInfo.type = 'user';
+
+      console.log(userInfo);
+
+      return axios.post(`/users`, userInfo);
     },
     onSuccess: () => {
       alert('회원가입이 완료되었습니다.');

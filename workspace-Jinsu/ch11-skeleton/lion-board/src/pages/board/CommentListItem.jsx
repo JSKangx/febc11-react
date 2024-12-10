@@ -10,7 +10,7 @@ CommentListItem.propTypes = {
     createdAt: PropTypes.string.isRequired,
     updatedAt: PropTypes.string.isRequired,
     user: PropTypes.shape({
-      image: PropTypes.string,
+      image: PropTypes.object,
       name: PropTypes.string.isRequired,
     }).isRequired,
   }).isRequired,
@@ -39,16 +39,20 @@ export default function CommentListItem({ item }) {
     removeItem.mutate(_id);
   };
 
+  console.log(item);
+
   return (
     <div className='shadow-md rounded-lg p-4 mb-4'>
       <div className='flex justify-between items-center mb-2'>
-        <img
-          className='w-8 mr-2 rounded-full'
-          src='https://api.fesp.shop/files/00-sample/user-muzi.webp'
-          alt={`${item.user.name}의 프로필 이미지`}
-        />
+        {item.user.image && (
+          <img
+            className='w-8 mr-2 rounded-full'
+            src={`https://11.fesp.shop${item.user.image.path}`}
+            alt={`${item.user.name}의 프로필 이미지`}
+          />
+        )}
         <Link to='' className='text-orange-400'>
-          {item.user.name ? item.user.name : '익명'}
+          {item.user.name}
         </Link>
         <time className='ml-auto text-gray-500' dateTime={`${item.updatedAt}`}>
           {item.updatedAt}
