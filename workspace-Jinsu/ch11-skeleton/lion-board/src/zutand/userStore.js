@@ -2,7 +2,7 @@ import { create } from 'zustand';
 // zustand 스토어를 스토리지에 연결하는 기능
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-// 객체를 리턴하는 create 메서드
+// 스토리지를 경유하는 버전
 const useUserStore = create(
   // 1번인자 : 함수, 2번인자 : 객체
   persist(
@@ -17,5 +17,12 @@ const useUserStore = create(
     }
   )
 );
+
+// 스토리지를 경유하지 않는 버전
+const prevUseUserStore = create((set) => ({
+  user: null,
+  setUser: (user) => set({ user }),
+  resetUser: () => set({ user: null }),
+}));
 
 export default useUserStore;

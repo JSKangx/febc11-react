@@ -12,7 +12,7 @@ function useAxiosInstance() {
     headers: {
       'Content-Type': 'application/json',
       accept: 'application/json',
-      'client-id': '00-brunch',
+      'client-id': '00-board',
     },
   });
 
@@ -27,7 +27,7 @@ function useAxiosInstance() {
     config.params = {
       // 호출할 때 delay를 명시적으로 지정 안 했으면 아래가 지정됨.
       // 개발할 때는 2000으로, 운영할 때는 0으로 환경변수로 지정해주면 된다.
-      delay: 500,
+      // delay: 500,
       ...config.params, // 나머지 기존 속성값 그대로
     };
 

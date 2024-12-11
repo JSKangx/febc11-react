@@ -2,6 +2,7 @@ import useAxiosInstance from '@hooks/useAxiosInstance';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import PropTypes from 'prop-types';
 import { Link, useParams } from 'react-router-dom';
+import useUserStore from '../../zutand/userStore';
 
 CommentListItem.propTypes = {
   item: PropTypes.shape({
@@ -11,12 +12,14 @@ CommentListItem.propTypes = {
     updatedAt: PropTypes.string.isRequired,
     user: PropTypes.shape({
       image: PropTypes.object,
-      name: PropTypes.string.isRequired,
+      name: PropTypes.string,
+      _id: PropTypes.number,
     }).isRequired,
   }).isRequired,
 };
 
 export default function CommentListItem({ item }) {
+  const { user } = useUserStore(); // 로그인한 유저 정보
   const axios = useAxiosInstance();
   const { _id } = useParams();
 
@@ -58,12 +61,16 @@ export default function CommentListItem({ item }) {
       </div>
       <div className='flex justify-between items-center mb-2'>
         <pre className='whitespace-pre-wrap text-sm'>{item.content}</pre>
-        <button
-          onClick={onSubmit}
-          className='bg-red-500 py-1 px-2 text-sm text-white font-semibold ml-2 hover:bg-amber-400 rounded'
-        >
-          삭제
-        </button>
+        {user?._id === item.user._id && (
+          <>
+            <button
+              onClick={onSubmit}
+              className='bg-red-500 py-1 px-2 text-sm text-white font-semibold ml-2 hover:bg-amber-400 rounded'
+            >
+              삭제
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
