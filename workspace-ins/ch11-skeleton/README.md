@@ -29,7 +29,7 @@ npx serve .
   # 기본 패키지 설치
   npm i
   # 추가 패키지 설치
-  npm i prop-types react-router-dom react-hook-form axios @tanstack/react-query @tanstack/react-query-devtools react-spinners react-toastify recoil recoil-persist zustand
+  npm i prop-types react-router-dom react-hook-form axios @tanstack/react-query @tanstack/react-query-devtools react-spinners react-toastify zustand
   npm i -D tailwindcss postcss autoprefixer
   # 개발 서버 실행
   npm run dev
@@ -53,7 +53,6 @@ export default defineConfig({
       { find: "@components", replacement: "/src/components" },
       { find: "@pages", replacement: "/src/pages" },
       { find: "@hooks", replacement: "/src/hooks" },
-      { find: "@recoil", replacement: "/src/recoil" },
       { find: "@zustand", replacement: "/src/zustand" },
     ],
   },
@@ -69,7 +68,6 @@ export default defineConfig({
       "@components/*": ["components/*"],
       "@pages/*": ["pages/*"],
       "@hooks/*": ["hooks/*"],
-      "@recoil/*": ["recoil/*"],
       "@zustand/*": ["zustand/*"],
     }
   }
@@ -170,7 +168,6 @@ export default {
 
   export default function ErrorPage() {
     return (
-      <>
       <div className="flex flex-col min-h-screen dark:bg-gray-700 dark:text-gray-200 transition-color duration-500 ease-in-out">
         <Header />
         <div className="py-20 bg-red-100 border border-red-400 text-red-700 p-4 rounded-lg flex flex-col items-center space-y-2">
@@ -183,7 +180,6 @@ export default {
         </div>
         <Footer />
       </div>
-      </>
     );
   }
   ```
@@ -408,7 +404,7 @@ export default {
     }
     ```
 
-  - react-hook-form의 regist 함수로 입력 요소 등록 및 검증 실패 메세지 출력
+  - react-hook-form의 register 함수로 입력 요소 등록 및 검증 실패 메세지 출력
     ```jsx
     <input
       id="title"
@@ -643,14 +639,9 @@ export default {
   const navigate = useNavigate();
   const axios = useAxiosInstance();
   const addUser = useMutation({
-    mutationFn: formData => {
-      const body = {
-        type: 'user',
-        name: formData.name,
-        email: formData.email,
-        password: formData.password,
-      };
-      return axios.post(`/users`, body);
+    mutationFn: userInfo => {
+      userInfo.type = 'user';
+      return axios.post(`/users`, userInfo);
     },
     onSuccess: () => {
       alert('회원가입 완료');
@@ -674,8 +665,6 @@ export default {
 
 ### 로그인
 * pages/user/Login.jsx
-
-* pages/user/Signup.jsx
   - react-hook-form으로 입력 요소 관리
     ```jsx
     const { register, handleSubmit, formState: { errors }, setError } = useForm();
@@ -714,7 +703,6 @@ export default {
       navigate(`/`);
     },
     onError: (err) => {
-      console.error(err);
       if(err.response?.data.errors){
         err.response?.data.errors.forEach(error => setError(error.path, { message: error.msg }));
       }else{
@@ -728,7 +716,6 @@ export default {
     ```jsx
     <form onSubmit={ handleSubmit(login.mutate) }>
     ```
-
 
 ### 요청 헤더에 Authorization 추가
 * hooks/useAxiosInstance.jsx 수정
@@ -890,19 +877,58 @@ export default {
     const axios = useAxiosInstance();
     const queryClient = useQueryClient();
     const removeItem = useMutation({
-      mutationFn: (reply_id) => axios.delete(`/posts/${_id}/replies/${reply_id}`),
+      mutationFn: () => axios.delete(`/posts/${_id}/replies/${item._id}`),
       onSuccess: () => {
         queryClient.invalidateQueries({ queryKey: ['posts', _id] });
       }
     });
 
-    const onSubmit = (event, reply_id) => {
+    const onSubmit = (event) => {
       event.preventDefault();
-      removeItem.mutate(reply_id);
+      removeItem.mutate();
     };
     ```
 
   - form에 삭제 이벤트 등록
     ```jsx
-    <form onSubmit={ (event) => onSubmit(event, item._id) }>
+    <form onSubmit={ onSubmit }>
     ```
+
+### 회원 가입시 프로필 이미지 추가
+* Signup.jsx
+  - mutationFn 수정
+    ```jsx
+    mutationFn: async userInfo => {
+      // 이미지 먼저 업로드
+      if(userInfo.attach.length > 0){
+        const imageFormData = new FormData();
+        imageFormData.append('attach', userInfo.attach[0]);
+
+        const fileRes = await axios.post('/files', imageFormData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+
+        userInfo.image = fileRes.data.item[0];
+        delete userInfo.attach;
+      }
+
+      userInfo.type = 'user';
+      return axios.post(`/users`, userInfo);
+    },
+    onSuccess: () => {
+      alert('회원가입 완료');
+      navigate(`/`);
+    },
+    onError: (err) => {
+      console.error(err);
+      if(err.response?.data.errors){
+        err.response?.data.errors.forEach(error => setError(error.path, { message: error.msg }));
+      }else{
+        alert(err.response?.data.message || '잠시후 다시 요청하세요.');
+      }
+    },
+    ```
+
+
