@@ -15,7 +15,13 @@ export default function Login() {
     handleSubmit,
     formState: { errors },
     setError, // 수동으로 errors 객체를 지정하고 싶을 때
-  } = useForm();
+  } = useForm({
+    // 테스트할 때 로그인 쉽게 하기 위한 아이디 비밀번호 기본값 저장
+    defaultValues: {
+      email: 'rkdwlstn@gmail.com',
+      password: '11111111',
+    },
+  });
 
   const axios = useAxiosInstance();
 

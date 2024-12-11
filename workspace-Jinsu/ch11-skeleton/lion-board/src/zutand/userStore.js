@@ -4,7 +4,7 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 
 // 스토리지를 경유하는 버전
 const useUserStore = create(
-  // 1번인자 : 함수, 2번인자 : 객체
+  // 1번인자 : 함수(스토어 세팅 함수), 2번인자 : 객체(스토리지에 저장할 때 설정 정보)
   persist(
     (set) => ({
       user: null, // 초기값
@@ -13,7 +13,8 @@ const useUserStore = create(
     }),
     {
       name: 'user', // 키값
-      storage: createJSONStorage(() => sessionStorage), // 기본은 로컬이기에 session으로 변경
+      // 기본은 로컬이기에 session으로 변경
+      storage: createJSONStorage(() => sessionStorage),
     }
   )
 );
