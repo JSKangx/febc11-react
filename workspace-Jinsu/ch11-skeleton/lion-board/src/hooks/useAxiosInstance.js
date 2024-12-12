@@ -26,15 +26,9 @@ function useAxiosInstance() {
   // 요청 인터셉터 추가하기
   // 전달되는 config는 서버 요청할 때 보내는 axios 설정값 (instance + 호출할 때 설정한 것)
   instance.interceptors.request.use((config) => {
-    if (user) {
-      // 기본적으로는 access token을 보낸다.
-      let token = user.accessToken;
-      // 만약 refresh url로 보내는 경우에만 refresh token을 사용한다.
-      if (config.url === REFRESH_URL) {
-        token = user.refreshToken;
-      }
-
-      config.headers['Authorization'] = `Bearer ${token}`;
+    // refresh 요청일 경우 Authorization 헤더는 이미 refresh token으로 지정되어 있음
+    if (user && config.url !== REFRESH_URL) {
+      config.headers.Authorization = `Bearer ${user.accessToken}`;
     }
 
     // 요청이 전달되기 전에 필요한 공통 작업 수행
@@ -59,65 +53,42 @@ function useAxiosInstance() {
     async (error) => {
       // 2xx 외의 범위에 있는 상태 코드는 이 함수가 호출됨
       // 공통 에러 처리
-      console.error(error);
+      console.error('인터셉터', error);
+      const { config, response } = error;
 
-      toast.error('에러가 발생했습니다. 잠시 후 다시 시도해주세요.', {
-        position: 'top-center',
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-        transition: Slide,
-      });
-
-      const { config, reponse } = error;
-      // reponse가 있다 : 서버로부터 응답이 된 에러
-      if (reponse?.status === 401) {
-        // 401 : 인증 실패 코드
+      if (response?.status === 401) {
+        // 인증 실패
         if (config.url === REFRESH_URL) {
-          // refresh 토큰까지 만료된 경우 (REFRESH_URL로부터 응답 받았다)
-          const goToLogin = confirm(
-            '로그인 후에 이용 가능합니다. \n 로그인 페이지로 이동하시겠습니까?'
-          );
-          if (goToLogin) {
-            // 원래 가려던 페이지를 from이라는 값에 저장
-            navigate('/users/login', { state: { from: location.pathname } });
-          }
+          // refresh token 만료
+          navigateLogin();
+        } else if (user) {
+          // 로그인 했으나 access token 만료된 경우
+          // refresh 토큰으로 access 토큰 재발급 요청
+          const {
+            data: { accessToken },
+          } = await instance.get(REFRESH_URL, {
+            headers: {
+              Authorization: `Bearer ${user.refreshToken}`,
+            },
+          });
+          setUser({ ...user, accessToken });
+          // 갱신된 accessToken으로 재요청
+          config.headers.Authorization = `Bearer ${accessToken}`;
+          // 다시 서버 요청
+          return axios(config);
         } else {
-          // (1) accessToken 만료된 경우 : 재발행
-          const accessToken = await getAccessToken(instance);
-          if (accessToken) {
-            // 갱신된 accessToken으로 요청을 다시 보냄
-            // 헤더에 Authorization을 새로운 값으로 세팅
-            config.headers.Authorization = `Bearer ${accessToken}`;
-            // 다시 요청하고 완성된 결과를 return
-            return axios(config); // instance 아님.
-          }
-          // (2) 아예 토큰이 없을 경우(로그인 안 함) - refresh 토큰 한 번 더 써보고, 안 되면 if 문으로 걸림
+          // 로그인 안한 경우
+          navigateLogin();
         }
-      } else {
-        // 인증 실패가 아닌 다른 에러는 클라이언트에 error 객체로 넘겨줌.
-        // 여기서 전달한 error 객체는 catch 블럭의 err 인수로 전달된다.
-        return Promise.reject(error);
       }
+      return Promise.reject(error);
     }
   );
 
-  // access token 재발급
-  async function getAccessToken(instance) {
-    try {
-      // 이 안에서 refreshToken을 가지고 와서 instance를 통해 ajax 요청을 보내지 않는 이유는 instance의 요청 인터셉터에 설정된 headers 설정이 덮어씌워져서 결국 리프레시 토큰이 안 보내지기 때문이다.
-      const {
-        data: { accessToken },
-      } = await instance.get(REFRESH_URL);
-      setUser({ ...user, accessToken });
-      return accessToken;
-    } catch (err) {
-      console.error(err);
-    }
+  // 로그인되지 않은 사용자가 로그인 이후에 사용할 api호출할 때 리다이렉트
+  function navigateLogin() {
+    const gotoLogin = confirm('로그인 후 이용 가능합니다.\n로그인 페이지로 이동하시겠습니까?');
+    gotoLogin && navigate('/users/login', { state: { from: location.pathname } });
   }
 
   return instance;

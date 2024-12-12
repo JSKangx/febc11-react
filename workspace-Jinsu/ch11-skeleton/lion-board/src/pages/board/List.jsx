@@ -2,9 +2,13 @@ import ListItem from '@pages/board/ListItem';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import useAxiosInstance from '@hooks/useAxiosInstance';
+import useUserStore from '../../zutand/userStore';
 
 export default function List() {
   const axios = useAxiosInstance();
+
+  // 로그인한 유저 정보 가져오기
+  const { user } = useUserStore();
 
   // routes.jsx에서 /:type 이라고 해놨기 때문에
   // localhost/info => { type: info }가 된다.
@@ -45,13 +49,15 @@ export default function List() {
           </button>
         </form>
 
-        <Link
-          // 현재 주소(게시판 종류) 뒤에 /new가 붙는 링크로 이동
-          to='new'
-          className='bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
-        >
-          글작성
-        </Link>
+        {user && (
+          <Link
+            // 현재 주소(게시판 종류) 뒤에 /new가 붙는 링크로 이동
+            to='new'
+            className='bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
+          >
+            글작성
+          </Link>
+        )}
       </div>
       <section className='pt-10'>
         <table className='border-collapse w-full table-fixed'>

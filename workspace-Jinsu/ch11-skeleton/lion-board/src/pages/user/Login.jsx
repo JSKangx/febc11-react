@@ -2,10 +2,11 @@ import InputError from '@components/InputError';
 import useAxiosInstance from '@hooks/useAxiosInstance';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import useUserStore from '../../zutand/userStore';
 
 export default function Login() {
+  const location = useLocation();
   const navigate = useNavigate();
   // 로그인 상태 관리 dispatch 함수
   const setUser = useUserStore((store) => store.setUser);
@@ -39,7 +40,8 @@ export default function Login() {
       });
 
       alert(res.data.item.name + '님, 로그인 되었습니다.');
-      navigate(`/`);
+      // 로그인 성공 후, 이전에 접속하려던 페이지로 이동 || 홈페이지로 이동
+      navigate(location.state?.from || `/`);
     },
     onError: (err) => {
       console.error(err);
