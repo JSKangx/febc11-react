@@ -6,7 +6,6 @@ import useUserStore from '../../zutand/userStore';
 
 export default function Detail() {
   const { user } = useUserStore();
-  console.log(user);
 
   const axios = useAxiosInstance();
 
