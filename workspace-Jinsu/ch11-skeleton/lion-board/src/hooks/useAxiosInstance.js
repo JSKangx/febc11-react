@@ -57,30 +57,41 @@ function useAxiosInstance() {
       const { config, response } = error;
 
       if (response?.status === 401) {
-        // 인증 실패
+        // (1) 갱신 요청에서 401 발생 → 로그인 페이지로 리다이렉트
         if (config.url === REFRESH_URL) {
-          // refresh token 만료
           navigateLogin();
-        } else if (user) {
-          // 로그인 했으나 access token 만료된 경우
-          // refresh 토큰으로 access 토큰 재발급 요청
-          const {
-            data: { accessToken },
-          } = await instance.get(REFRESH_URL, {
-            headers: {
-              Authorization: `Bearer ${user.refreshToken}`,
-            },
-          });
-          setUser({ ...user, accessToken });
-          // 갱신된 accessToken으로 재요청
-          config.headers.Authorization = `Bearer ${accessToken}`;
-          // 다시 서버 요청
-          return axios(config);
-        } else {
-          // 로그인 안한 경우
-          navigateLogin();
+          return Promise.reject(error);
         }
+
+        // (2) 일반 요청에서 401 발생 → 토큰 갱신 시도
+        if (user) {
+          // 1. refreshToken으로 새로운 accessToken 요청
+          try {
+            const {
+              data: { accessToken },
+            } = await instance.get(REFRESH_URL, {
+              headers: {
+                Authorization: `Bearer ${user.refreshToken}`,
+              },
+            });
+
+            // 2. 새로운 accessToken으로 user 상태 갱신
+            setUser({ ...user, accessToken });
+
+            // 3. 갱신된 accessToken으로 원래 요청 재시도
+            config.headers.Authorization = `Bearer ${accessToken}`;
+            return axios(config); // 재요청
+          } catch (refreshError) {
+            // 4. refreshToken 요청 실패 시 로그인 페이지로 이동
+            navigateLogin();
+            return Promise.reject(refreshError);
+          }
+        }
+
+        // 로그인 안 된 상태에서의 401
+        navigateLogin();
       }
+
       return Promise.reject(error);
     }
   );
