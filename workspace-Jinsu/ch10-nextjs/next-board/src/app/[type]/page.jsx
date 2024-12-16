@@ -1,11 +1,38 @@
+import ListItem from '@/app/[type]/ListItem';
 import Link from 'next/link';
 
-export default function Page() {
+// 게시물 목록 조회
+// next에서는 fetch api로도 데이터 캐싱 등을 편리하게 할 수 있다(useQuery 안 써도 됨).
+async function fetchPost(type) {
+  const url = `https://11.fesp.shop/posts?type=${type}`;
+  const res = await fetch(url, {
+    headers: { 'client-id': '00-board' },
+  });
+  return await res.json();
+}
+
+export default async function Page({ params }) {
+  // next 14버전까지 : next가 주소창에 있는 params를 props로 넘겨준다.
+  // const { type } = params;
+
+  // next 15이후
+  const { type } = await params;
+
+  const data = await fetchPost(type);
+  console.log(data.item.length, '건 조회됨');
+
+  // data 없으면 로딩중 보여주는 검증 작업을 할 필요가 없다. 왜냐하면 이건 서버 컴포넌트(node.js가 실행하는 코드)다. 서버에서 결과물을 만들어서 보내주기 때문(SSR)에 받아오는 시점에는 데이터가 없을 수가 없다.
+  // 로딩을 할 때는 어떻게 하면 되냐? Loading이라는 컴포넌트를 만들면 된다.
+
+  const list = data.item.map((item) => <ListItem key={item._id} item={item} />);
+
   return (
     <>
       <main className='min-w-80 p-10'>
         <div className='text-center py-4'>
-          <h2 className='pb-4 text-2xl font-bold text-gray-700 dark:text-gray-200'>정보 공유</h2>
+          <h2 className='pb-4 text-2xl font-bold text-gray-700 dark:text-gray-200'>
+            {type} 게시판
+          </h2>
         </div>
         <div className='flex justify-end mr-4'>
           <form action='#'>
@@ -49,36 +76,7 @@ export default function Page() {
                 <th className='p-2 whitespace-nowrap font-semibold hidden sm:table-cell'>작성일</th>
               </tr>
             </thead>
-            <tbody>
-              <tr className='border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out'>
-                <td className='p-2 text-center'>2</td>
-                <td className='p-2 truncate indent-4'>
-                  <Link href='/info/2' className='cursor-pointer'>
-                    안녕하세요.
-                  </Link>
-                </td>
-                <td className='p-2 text-center truncate'>용쌤</td>
-                <td className='p-2 text-center hidden sm:table-cell'>29</td>
-                <td className='p-2 text-center hidden sm:table-cell'>2</td>
-                <td className='p-2 truncate text-center hidden sm:table-cell'>
-                  2024.07.05 13:39:23
-                </td>
-              </tr>
-              <tr className='border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out'>
-                <td className='p-2 text-center'>1</td>
-                <td className='p-2 truncate indent-4'>
-                  <Link href='/info/1' className='cursor-pointer'>
-                    좋은 소식이 있습니다.
-                  </Link>
-                </td>
-                <td className='p-2 text-center truncate'>제이지</td>
-                <td className='p-2 text-center hidden sm:table-cell'>22</td>
-                <td className='p-2 text-center hidden sm:table-cell'>5</td>
-                <td className='p-2 truncate text-center hidden sm:table-cell'>
-                  2024.07.03 17:59:13
-                </td>
-              </tr>
-            </tbody>
+            <tbody>{list}</tbody>
           </table>
           <hr />
 

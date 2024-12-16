@@ -1,3 +1,4 @@
+import './globals.css';
 import Link from 'next/link';
 
 export default function RootLayout({ children }) {
@@ -25,8 +26,6 @@ export default function RootLayout({ children }) {
         <meta property='og:url' content='https://board.fesp.shop' />
         <meta property='og:type' content='website' />
         <meta property='og:site_name' content='멋사컴' />
-
-        <script src='https://cdn.tailwindcss.com'></script>
       </head>
       <body>
         <div id='root'>
