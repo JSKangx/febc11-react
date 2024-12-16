@@ -60,7 +60,7 @@ export default async function Page({ params }) {
           </form>
 
           <Link
-            href='/info/new'
+            href={`/${type}/new`}
             className='bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
           >
             글작성

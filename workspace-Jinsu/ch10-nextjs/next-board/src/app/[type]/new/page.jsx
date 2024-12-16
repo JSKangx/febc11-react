@@ -1,6 +1,9 @@
+import { addPost } from '@/actions/postAction';
 import Link from 'next/link';
 
-export default function Page() {
+export default async function Page({ params }) {
+  const { type } = await params;
+
   return (
     <>
       <main className='min-w-[320px] p-4'>
@@ -8,9 +11,11 @@ export default function Page() {
           <h2 className='text-2xl font-bold text-gray-700 dark:text-gray-200'>게시글 등록</h2>
         </div>
         <section className='mb-8 p-4'>
-          <form action='/info/1'>
+          {/* 서버 액션 함수를 action 값으로 지정할 수 있다. */}
+          <form action={addPost}>
+            <input type='hidden' name='type' value={type} />
             <div className='my-4'>
-              <label className='block text-lg content-center' for='title'>
+              <label className='block text-lg content-center' htmlFor='title'>
                 제목
               </label>
               <input
@@ -23,7 +28,7 @@ export default function Page() {
               <p className='ml-2 mt-1 text-sm text-red-500 dark:text-red-400'>제목은 필수입니다.</p>
             </div>
             <div className='my-4'>
-              <label className='block text-lg content-center' for='content'>
+              <label className='block text-lg content-center' htmlFor='content'>
                 내용
               </label>
               <textarea
