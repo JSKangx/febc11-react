@@ -10,7 +10,7 @@ export default function Page() {
 
         <form action='/'>
           <div className='mb-4'>
-            <label className='block text-gray-700 dark:text-gray-200 mb-2' for='email'>
+            <label className='block text-gray-700 dark:text-gray-200 mb-2' htmlFor='email'>
               이메일
             </label>
             <input
@@ -23,7 +23,7 @@ export default function Page() {
             <p className='ml-2 mt-1 text-sm text-red-500 dark:text-red-400'>이메일은 필수입니다.</p>
           </div>
           <div className='mb-4'>
-            <label className='block text-gray-700 dark:text-gray-200 mb-2' for='password'>
+            <label className='block text-gray-700 dark:text-gray-200 mb-2' htmlFor='password'>
               비밀번호
             </label>
             <input

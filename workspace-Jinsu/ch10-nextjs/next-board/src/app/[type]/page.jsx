@@ -3,12 +3,22 @@ import Link from 'next/link';
 
 // 게시물 목록 조회
 // next에서는 fetch api로도 데이터 캐싱 등을 편리하게 할 수 있다(useQuery 안 써도 됨).
-async function fetchPost(type) {
+async function fetchPosts(type) {
   const url = `https://11.fesp.shop/posts?type=${type}`;
   const res = await fetch(url, {
     headers: { 'client-id': '00-board' },
   });
   return await res.json();
+}
+
+// 동적으로 메타데이터를 설정해야 한다면, generateMetadata 함수를 만들고, 메타 데이터 '객체'를 반환해주면 된다.
+export async function generateMetadata({ params }) {
+  const { type } = await params;
+
+  return {
+    title: `${type} 게시물 목록`,
+    description: '게시물 목록 페이지입니다.',
+  };
 }
 
 export default async function Page({ params }) {
@@ -18,7 +28,7 @@ export default async function Page({ params }) {
   // next 15이후
   const { type } = await params;
 
-  const data = await fetchPost(type);
+  const data = await fetchPosts(type);
   console.log(data.item.length, '건 조회됨');
 
   // data 없으면 로딩중 보여주는 검증 작업을 할 필요가 없다. 왜냐하면 이건 서버 컴포넌트(node.js가 실행하는 코드)다. 서버에서 결과물을 만들어서 보내주기 때문(SSR)에 받아오는 시점에는 데이터가 없을 수가 없다.

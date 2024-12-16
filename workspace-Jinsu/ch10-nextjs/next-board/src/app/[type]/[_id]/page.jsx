@@ -1,21 +1,43 @@
 import Link from 'next/link';
 
-export default function Page() {
+// 게시물 목록 조회
+// next에서는 fetch api로도 데이터 캐싱 등을 편리하게 할 수 있다(useQuery 안 써도 됨).
+async function fetchPost(_id) {
+  const url = `https://11.fesp.shop/posts/${_id}`;
+  const res = await fetch(url, {
+    headers: { 'client-id': '00-board' },
+  });
+  return await res.json();
+}
+
+// 동적으로 메타데이터를 설정해야 한다면, generateMetadata 함수를 만들고, 메타 데이터 '객체'를 반환해주면 된다.
+export async function generateMetadata({ params }) {
+  const { _id } = await params;
+  const data = await fetchPost(_id);
+
+  return {
+    title: data.item.title,
+    description: data.item.content,
+  };
+}
+
+export default async function Page({ params }) {
+  const { _id } = await params;
+  // 위에서도 호출했고, 여기서도 호출했지만 next는 데이터 캐싱을 지원하기 때문에 서버랑 2번 통신하지 않고, 캐시된 데이터를 반환해준다.
+  // 자식 컴포넌트에서도 똑같은 데이터가 필요할 때 유용함. 자식 컴포넌트에서 api 서버를 다시 호출해도 캐시된 데이터를 반환해주기 때문에 props로 안 넘겨줘도 됨.
+  const data = await fetchPost(_id);
+
   return (
     <>
       <main className='container mx-auto mt-4 px-4'>
         <section className='mb-8 p-4'>
           <form action='/info'>
-            <div className='font-semibold text-xl'>제목 : 좋은 소식이 있습니다.</div>
-            <div className='text-right text-gray-400'>작성자 : 제이지</div>
+            <div className='font-semibold text-xl'>제목 : {data.item.title}</div>
+            <div className='text-right text-gray-400'>작성자 : {data.item.user.name}</div>
             <div className='mb-4'>
               <div>
                 <pre className='font-roboto w-full p-2 whitespace-pre-wrap'>
-                  좋은 소식을 가지고 왔습니다.
-                  <br />
-                  오늘 드디어 최종 면접을 합니다.
-                  <br />
-                  많이 응원해 주세요^^
+                  {data.item.content}
                 </pre>
               </div>
               <hr />

@@ -1,5 +1,11 @@
 import Link from 'next/link';
 
+export const metadata = {
+  title: {
+    absolute: '멋쟁이 사자처럼 커뮤니티',
+  },
+};
+
 export default function Home() {
   return (
     <main className='container mx-auto mt-10 p-4 transition-color'>
