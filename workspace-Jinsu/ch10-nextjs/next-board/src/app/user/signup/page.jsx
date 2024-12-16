@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Page() {
   return (
     <>
@@ -73,12 +75,12 @@ export default function Page() {
               >
                 회원가입
               </button>
-              <a
+              <Link
                 href='/'
                 className='bg-gray-900 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
               >
                 취소
-              </a>
+              </Link>
             </div>
           </form>
         </div>

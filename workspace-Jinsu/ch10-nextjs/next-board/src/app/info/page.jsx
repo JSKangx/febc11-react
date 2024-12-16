@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 export default function Page() {
   return (
     <>
@@ -20,12 +22,12 @@ export default function Page() {
             </button>
           </form>
 
-          <a
+          <Link
             href='/info/new'
             className='bg-orange-500 py-1 px-4 text-base text-white font-semibold ml-2 hover:bg-amber-400 rounded'
           >
             글작성
-          </a>
+          </Link>
         </div>
         <section className='pt-10'>
           <table className='border-collapse w-full table-fixed'>
@@ -51,9 +53,9 @@ export default function Page() {
               <tr className='border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out'>
                 <td className='p-2 text-center'>2</td>
                 <td className='p-2 truncate indent-4'>
-                  <a href='/info/2' className='cursor-pointer'>
+                  <Link href='/info/2' className='cursor-pointer'>
                     안녕하세요.
-                  </a>
+                  </Link>
                 </td>
                 <td className='p-2 text-center truncate'>용쌤</td>
                 <td className='p-2 text-center hidden sm:table-cell'>29</td>
@@ -65,9 +67,9 @@ export default function Page() {
               <tr className='border-b border-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition duration-300 ease-in-out'>
                 <td className='p-2 text-center'>1</td>
                 <td className='p-2 truncate indent-4'>
-                  <a href='/info/1' className='cursor-pointer'>
+                  <Link href='/info/1' className='cursor-pointer'>
                     좋은 소식이 있습니다.
-                  </a>
+                  </Link>
                 </td>
                 <td className='p-2 text-center truncate'>제이지</td>
                 <td className='p-2 text-center hidden sm:table-cell'>22</td>
@@ -83,10 +85,10 @@ export default function Page() {
           <div>
             <ul className='flex justify-center gap-3 m-4'>
               <li className='font-bold text-blue-700'>
-                <a href='/info?page=1'>1</a>
+                <Link href='/info?page=1'>1</Link>
               </li>
               <li>
-                <a href='/info?page=2'>2</a>
+                <Link href='/info?page=2'>2</Link>
               </li>
             </ul>
           </div>
